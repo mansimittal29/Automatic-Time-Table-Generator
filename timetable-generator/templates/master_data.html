@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BBSBEC Timetable Portal | {{ page_title }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="result-body">
+    <div class="bg-orb orb-3"></div>
+    <div class="bg-orb orb-4"></div>
+
+    <main class="container py-5">
+        <section class="hero-panel result-panel">
+            <p class="portal-college-name">Baba Banda Singh Bahadur Engineering College, Fatehgarh Sahib</p>
+            <p class="eyebrow mb-2">Master Data Management</p>
+            <h1 class="display-title mb-3">{{ page_title }}</h1>
+            <p class="hero-copy mb-3">Maintain validated institutional records used by the BBSBEC timetable generation engine.</p>
+            <div class="d-flex flex-wrap gap-2">
+                <a class="btn btn-outline-light" href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a class="btn btn-outline-light" href="{{ url_for('index') }}">Generate Timetable</a>
+                <a class="btn btn-outline-light" href="{{ url_for('logout') }}">Sign Out</a>
+            </div>
+        </section>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <section class="card-surface p-3 p-md-4 mt-4">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} mb-2" role="alert">{{ message }}</div>
+                    {% endfor %}
+                </section>
+            {% endif %}
+        {% endwith %}
+
+        <section class="card-surface p-3 p-md-4 mt-4">
+            <h2 class="mini-title mb-3">
+                {% if edit_row %}
+                    Update {{ page_title[:-1] if page_title.endswith('s') else page_title }}
+                {% else %}
+                    Add New {{ page_title[:-1] if page_title.endswith('s') else page_title }}
+                {% endif %}
+            </h2>
+            <form method="post" action="{{ create_action }}" class="row g-3" novalidate>
+                {% if edit_row %}
+                    <input type="hidden" name="item_id" value="{{ edit_row.id }}">
+                {% endif %}
+                {% for field in fields %}
+                    <div class="col-md-4">
+                        <label for="{{ field.name }}" class="form-label form-label-strong">{{ field.label }}</label>
+                        {% if field.type == 'select' %}
+                            <select class="form-control" id="{{ field.name }}" name="{{ field.name }}" {% if field.required %}required{% endif %}>
+                                {% for option in field.options %}
+                                    <option
+                                        value="{{ option.value }}"
+                                        {% if edit_row and field.name in edit_row and (edit_row[field.name]|string) == (option.value|string) %}selected{% endif %}
+                                    >{{ option.label }}</option>
+                                {% endfor %}
+                            </select>
+                        {% else %}
+                            <input
+                                type="{{ field.type }}"
+                                class="form-control"
+                                id="{{ field.name }}"
+                                name="{{ field.name }}"
+                                value="{{ edit_row[field.name] if edit_row and field.name in edit_row else '' }}"
+                                {% if field.required %}required{% endif %}
+                            >
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <div class="col-12 d-flex gap-2 mt-2">
+                    <button type="submit" class="btn btn-generate">
+                        {{ 'Update Record' if edit_row else 'Add Record' }}
+                    </button>
+                    {% if edit_row %}
+                        <a class="btn btn-outline-dark" href="{{ create_action }}">Cancel Edit</a>
+                    {% endif %}
+                </div>
+            </form>
+        </section>
+
+        <section class="card-surface p-3 p-md-4 mt-4">
+            <h2 class="mini-title mb-3">Existing Records</h2>
+            <div class="table-responsive">
+                <table class="table timetable-table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            {% for column in columns %}
+                                <th>{{ column.label }}</th>
+                            {% endfor %}
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in rows %}
+                            <tr>
+                                {% for column in columns %}
+                                    <td>{{ row[column.key] }}</td>
+                                {% endfor %}
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        {% if edit_endpoint %}
+                                            <a class="btn btn-sm btn-outline-primary" href="{{ url_for(edit_endpoint, edit_id=row.id) }}">Edit</a>
+                                        {% endif %}
+                                        <form method="post" action="{{ url_for(delete_endpoint, item_id=row.id) }}" onsubmit="return confirm('Delete this record?');">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="{{ columns|length + 1 }}" class="text-center text-muted">No records found.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

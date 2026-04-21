@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}Substitute Faculty - Timetable Generator{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="page-header mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="h2">Substitute Absent Faculty</h1>
+            <a href="{{ url_for('view_timetable_version', version_id=version.id) }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Timetable
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Select the absent faculty and optionally specify the day/period</h5>
+        </div>
+        <div class="card-body">
+            <p class="text-muted mb-4">
+                <i class="fas fa-info-circle"></i>
+                The system will intelligently find and assign replacement faculty to the classes of the absent teacher.
+                You can limit the substitution to a specific day or period (or leave blank to affect all scheduled classes).
+            </p>
+
+            <form method="POST" class="needs-validation">
+                <div class="form-group mb-4">
+                    <label for="absent_faculty" class="form-label form-label-strong">
+                        <span class="text-danger">*</span> Absent Faculty
+                    </label>
+                    <select class="form-select" id="absent_faculty" name="absent_faculty" required>
+                        <option value="">-- Select faculty member --</option>
+                        {% for faculty in faculty_list %}
+                        <option value="{{ faculty }}">{{ faculty }}</option>
+                        {% endfor %}
+                    </select>
+                    <small class="form-text text-muted">
+                        Select the faculty member who will be absent
+                    </small>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <label for="day" class="form-label">Day (Optional)</label>
+                        <select class="form-select" id="day" name="day">
+                            <option value="">-- All days --</option>
+                            {% for day_idx, day_name in enumerate(days) %}
+                            <option value="{{ day_idx }}">{{ day_name }}</option>
+                            {% endfor %}
+                        </select>
+                        <small class="form-text text-muted">
+                            Leave blank to substitute across all days
+                        </small>
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                        <label for="period" class="form-label">Period (Optional)</label>
+                        <select class="form-select" id="period" name="period">
+                            <option value="">-- All periods --</option>
+                            {% for period_idx, period_name in enumerate(periods) %}
+                            <option value="{{ period_idx }}">{{ period_name }}</option>
+                            {% endfor %}
+                        </select>
+                        <small class="form-text text-muted">
+                            Leave blank to substitute across all periods
+                        </small>
+                    </div>
+                </div>
+
+                <div class="alert alert-info mb-4">
+                    <h6 class="alert-heading">How the system works:</h6>
+                    <ul class="mb-0">
+                        <li>The system finds all classes taught by the selected faculty</li>
+                        <li>For each class, it searches for a replacement teacher with minimal schedule disruption</li>
+                        <li>A new draft version is created with substitutions applied</li>
+                        <li>The original timetable remains unchanged</li>
+                    </ul>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-check"></i> Apply Substitutions
+                    </button>
+                    <a href="{{ url_for('view_timetable_version', version_id=version.id) }}" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Help Section -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h6 class="mb-0">💡 Tips for Faculty Substitution</h6>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h6 class="text-muted">General Substitution</h6>
+                    <p class="small">
+                        Use when a faculty member is absent for an entire day or multiple days.
+                        Leave both day and period empty to substitute all their classes.
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-muted">Partial Substitution</h6>
+                    <p class="small">
+                        Use when a faculty member is absent only for specific periods.
+                        Select the day and period to limit substitutions to that time slot.
+                    </p>
+                </div>
+                <div class="col-md-6 mt-3">
+                    <h6 class="text-muted">Substitution Priority</h6>
+                    <p class="small">
+                        The system prioritizes replacements by:
+                        1. Teachers with lowest load
+                        2. Teachers who already teach same subject
+                        3. Minimal schedule disruption
+                    </p>
+                </div>
+                <div class="col-md-6 mt-3">
+                    <h6 class="text-muted">After Substitution</h6>
+                    <p class="small">
+                        A new draft version is created. You can:
+                        <ul class="mb-0 small">
+                            <li>View the new timetable</li>
+                            <li>Make additional adjustments</li>
+                            <li>Revert by viewing the original version</li>
+                        </ul>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.form-label-strong {
+    font-weight: 500;
+    color: #333;
+}
+</style>
+{% endblock %}

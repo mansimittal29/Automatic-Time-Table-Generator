@@ -1,0 +1,293 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics - Timetable Generator{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="page-header mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="h2">{{ version.version_label }} - Analytics</h1>
+            <a href="{{ url_for('view_timetable_version', version_id=version.id) }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Timetable
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Fairness Scorecard -->
+        <div class="col-lg-4 mb-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h6 class="text-muted mb-2">Teacher Fairness Score</h6>
+                    <div class="display-3 mb-2">
+                        <span class="badge" style="background-color: {% if analytics.fairness_score >= 80 %}#28a745{% elif analytics.fairness_score >= 60 %}#ffc107{% else %}#dc3545{% endif %};">
+                            {{ "%.1f"|format(analytics.fairness_score) }}
+                        </span>
+                        <small style="font-size: 50%;">/100</small>
+                    </div>
+                    <small class="text-muted">
+                        Based on teaching load variance<br/>
+                        <strong>Higher is better</strong> (lower variance = fairer)
+                    </small>
+                    {% if analytics.fairness_score >= 80 %}
+                    <div class="alert alert-success mt-3 mb-0">✓ Excellent fairness</div>
+                    {% elif analytics.fairness_score >= 60 %}
+                    <div class="alert alert-warning mt-3 mb-0">⚠ Moderate fairness</div>
+                    {% else %}
+                    <div class="alert alert-danger mt-3 mb-0">✗ Poor fairness</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="col-lg-8 mb-4">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="text-muted mb-2">Total Scheduled Slots</h6>
+                            <h3 class="mb-0">{{ analytics.total_scheduled_slots }}</h3>
+                            <small class="text-muted">Classes assigned to periods</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="text-muted mb-2">Room Utilization</h6>
+                            <h3 class="mb-0">{{ "%.1f"|format(analytics.room_utilization_percent) }}%</h3>
+                            <small class="text-muted">Average room usage across all periods</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="text-muted mb-2">Total Conflicts</h6>
+                            <h3 class="mb-0">{{ analytics.total_conflict_count }}</h3>
+                            <small class="text-muted">Overlapping assignments detected</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="text-muted mb-2">Average Teacher Load</h6>
+                            <h3 class="mb-0">{{ "%.1f"|format(analytics.avg_teacher_load) }}</h3>
+                            <small class="text-muted">Classes per teacher (average)</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Room Utilization Heatmap -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Room Utilization Heatmap</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 120px;">Room</th>
+                            {% for day in days %}<th class="text-center" style="width: 100px;">{{ day[:3] }}</th>{% endfor %}
+                            <th class="text-center" style="width: 100px;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for room_key, room_data in analytics.room_heatmap_rows.items() %}
+                        <tr>
+                            <td><strong>{{ room_key }}</strong></td>
+                            {% for day_idx in range(days|length) %}
+                            {% set usage_count = room_data.get('day_' + (day_idx|string), 0) %}
+                            {% set max_possible = periods|length %}
+                            {% set percent = (usage_count / max_possible * 100) if max_possible > 0 else 0 %}
+                            <td class="text-center" style="background-color: {% if percent >= 80 %}#ff6b6b{% elif percent >= 60 %}#ffd93d{% elif percent >= 40 %}#a8e6cf{% else %}#e8f5e9{% endif %}; color: {% if percent >= 80 %}white{% else %}black{% endif %};">
+                                <small><strong>{{ usage_count }}</strong></small>
+                            </td>
+                            {% endfor %}
+                            <td class="text-center"><strong>{{ room_data.get('total', 0) }}</strong></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <small class="text-muted d-block mt-3">
+                <strong>Color Code:</strong>
+                <span class="badge" style="background-color: #ff6b6b;">≥80% (Over-utilized)</span>
+                <span class="badge" style="background-color: #ffd93d;">60-79% (High usage)</span>
+                <span class="badge" style="background-color: #a8e6cf;">40-59% (Good usage)</span>
+                <span class="badge" style="background-color: #e8f5e9;">≤39% (Under-utilized)</span>
+            </small>
+        </div>
+    </div>
+
+    <!-- Teacher Load Distribution -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Teacher Load Distribution</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-sm table-striped">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Teacher Name</th>
+                            <th class="text-end">Classes Assigned</th>
+                            <th class="text-end">Subjects</th>
+                            <th class="text-end">Working Days</th>
+                            <th>Load Graph</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for teacher, load_data in analytics.teacher_loads.items() %}
+                        {% set class_count = load_data.get('class_count', 0) %}
+                        {% set max_load = analytics.max_teacher_load %}
+                        {% set percent = (class_count / max_load * 100) if max_load > 0 else 0 %}
+                        <tr>
+                            <td><strong>{{ teacher }}</strong></td>
+                            <td class="text-end">{{ class_count }}</td>
+                            <td class="text-end">
+                                {% if load_data.get('subjects') %}
+                                <small>{{ load_data['subjects']|length }}</small>
+                                {% else %}
+                                —
+                                {% endif %}
+                            </td>
+                            <td class="text-end">
+                                {% if load_data.get('days_count') %}
+                                <small>{{ load_data['days_count'] }}</small>
+                                {% else %}
+                                —
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="progress" style="height: 20px;">
+                                    <div class="progress-bar" style="width: {{ percent }}%; background-color: {% if percent >= 90 %}#dc3545{% elif percent >= 70 %}#ffc107{% else %}#28a745{% endif %};">
+                                        <small style="color: {% if percent > 50 %}white{% endif %};">{{ class_count }}</small>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <small class="text-muted d-block mt-2">
+                Average load: <strong>{{ "%.1f"|format(analytics.avg_teacher_load) }} classes</strong>
+            </small>
+        </div>
+    </div>
+
+    <!-- Peak Period Analysis -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Peak Period Analysis</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-sm table-striped">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Period</th>
+                            <th class="text-end">Total Classes</th>
+                            <th class="text-end">Avg Room Utilization</th>
+                            <th class="text-end">Peak Load %</th>
+                            <th>Load Graph</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for period_idx, period_name in enumerate(analytics.periods_list) %}
+                        {% set classes_in_period = analytics.period_class_counts.get(period_idx, 0) %}
+                        {% set max_period = analytics.max_period_class_count %}
+                        {% set percent = (classes_in_period / max_period * 100) if max_period > 0 else 0 %}
+                        <tr>
+                            <td><strong>{{ period_name }}</strong></td>
+                            <td class="text-end">{{ classes_in_period }}</td>
+                            <td class="text-end">
+                                {% set util = analytics.period_utilization.get(period_idx, 0) %}
+                                {{ "%.1f"|format(util) }}%
+                            </td>
+                            <td class="text-end">
+                                <span class="badge {% if percent >= 80 %}bg-danger{% elif percent >= 60 %}bg-warning{% else %}bg-success{% endif %};">
+                                    {{ "%.0f"|format(percent) }}%
+                                </span>
+                            </td>
+                            <td>
+                                <div class="progress" style="height: 20px;">
+                                    <div class="progress-bar" style="width: {{ percent }}%; background-color: {% if percent >= 80 %}#dc3545{% elif percent >= 60 %}#ffc107{% else %}#28a745{% endif %};">
+                                        <small style="color: {% if percent > 50 %}white{% endif %};">{{ classes_in_period }}</small>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <small class="text-muted d-block mt-2">
+                Busiest period: <strong>{{ analytics.busiest_period_name }}</strong> 
+                ({{ analytics.busiest_period_load }} classes)
+            </small>
+        </div>
+    </div>
+
+    <!-- Subject Distribution -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Subject Distribution by Day</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-sm table-striped">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Subject</th>
+                            {% for day in days %}<th class="text-center">{{ day[:3] }}</th>{% endfor %}
+                            <th class="text-center">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for subject, subject_data in analytics.subject_distribution.items() %}
+                        <tr>
+                            <td><strong>{{ subject }}</strong></td>
+                            {% for day_idx in range(days|length) %}
+                            <td class="text-center">{{ subject_data.get('day_' + (day_idx|string), 0) }}</td>
+                            {% endfor %}
+                            <td class="text-center"><strong>{{ subject_data.get('total', 0) }}</strong></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Validation Issues (if any) -->
+    {% if analytics.validation_issues %}
+    <div class="card border-warning mb-4">
+        <div class="card-header bg-warning">
+            <h5 class="mb-0 text-dark">⚠ Validation Issues</h5>
+        </div>
+        <div class="card-body">
+            <ul class="list-unstyled">
+                {% for issue in analytics.validation_issues[:10] %}
+                <li class="mb-2">
+                    <i class="fas fa-exclamation-triangle text-warning"></i>
+                    {{ issue }}
+                </li>
+                {% endfor %}
+            </ul>
+            {% if analytics.validation_issues|length > 10 %}
+            <small class="text-muted">... and {{ analytics.validation_issues|length - 10 }} more issues</small>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,236 @@
+{% extends "base.html" %}
+
+{% block title %}Lock Slots - Timetable Generator{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="page-header mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="h2">Lock Slots for Regeneration</h1>
+            <a href="{{ url_for('view_timetable_version', version_id=version.id) }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Timetable
+            </a>
+        </div>
+    </div>
+
+    <div class="alert alert-info mb-4">
+        <h6 class="alert-heading">How to use this feature:</h6>
+        <p class="mb-2">
+            <strong>1. Select Cells:</strong> Click on the cells in the timetables below that you want to <strong>lock</strong> (freeze).
+            These cells will remain unchanged during regeneration.
+        </p>
+        <p class="mb-2">
+            <strong>2. Unselected Cells:</strong> All other cells will be regenerated with new assignments.
+        </p>
+        <p class="mb-0">
+            <strong>3. Regenerate:</strong> Click "Regenerate with Locked Slots" to start the process.
+            A new draft version will be created with your locked cells preserved.
+        </p>
+    </div>
+
+    <form method="POST" id="lock-slots-form" class="mb-4">
+        <div class="row mb-4">
+            {% for section_idx, section in enumerate(section_tables) %}
+            <div class="col-lg-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0">
+                            <i class="fas fa-th"></i> {{ section.section_key }}
+                            <span class="badge bg-secondary ms-2" id="lock-count-{{ section_idx }}">0 locked</span>
+                        </h6>
+                    </div>
+                    <div class="card-body p-2">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-sm mb-0" style="font-size: 0.8rem;">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th style="width: 80px; background-color: #f8f9fa;">Period</th>
+                                        {% for day_idx, day_name in enumerate(days) %}
+                                        <th class="text-center" style="width: 70px;">
+                                            <small>{{ day_name[:3] }}</small>
+                                        </th>
+                                        {% endfor %}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for period_idx in range(periods|length) %}
+                                    <tr>
+                                        <th style="background-color: #f8f9fa; font-size: 0.75rem;">
+                                            <small>{{ periods[period_idx][:8] }}</small>
+                                        </th>
+                                        {% for day_idx in range(days|length) %}
+                                        <td class="p-1 text-center" style="cursor: pointer; user-select: none;">
+                                            <input type="checkbox" 
+                                                   class="lock-cell" 
+                                                   data-section="{{ section.section_key }}"
+                                                   data-day="{{ day_idx }}"
+                                                   data-period="{{ period_idx }}"
+                                                   data-section-idx="{{ section_idx }}"
+                                                   style="cursor: pointer; width: 18px; height: 18px;"
+                                                   aria-label="Lock {{ section.section_key }} - {{ periods[period_idx] }} - {{ days[day_idx] }}">
+                                        </td>
+                                        {% endfor %}
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Hidden textarea for CSV data -->
+        <textarea id="locked_slots" name="locked_slots" style="display: none;"></textarea>
+
+        <!-- Action Buttons -->
+        <div class="sticky-bottom bg-white p-3 border-top">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <span id="total-locks" class="badge bg-primary">Total locked: 0</span>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-outline-secondary" id="clear-all-btn">
+                        <i class="fas fa-times"></i> Clear All
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-sync"></i> Regenerate with Locked Slots
+                    </button>
+                    <a href="{{ url_for('view_timetable_version', version_id=version.id) }}" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- Information Card -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h6 class="mb-0">💡 About Locked Slot Regeneration</h6>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h6 class="text-muted">Use Cases</h6>
+                    <ul class="small">
+                        <li>Keep lab sessions locked, regenerate theory classes</li>
+                        <li>Preserve morning slots, regenerate afternoon</li>
+                        <li>Keep specific subject-teacher assignments fixed</li>
+                        <li>Maintain critical schedule constraints</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-muted">Important Notes</h6>
+                    <ul class="small">
+                        <li>✓ Locked cells remain unchanged</li>
+                        <li>✓ Other cells are regenerated</li>
+                        <li>✓ New draft version is created</li>
+                        <li>✓ Original timetable remains safe</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Highlight locked cells */
+.lock-cell:checked + label {
+    background-color: #e3f2fd !important;
+}
+
+/* Hover effect */
+.table-bordered tbody td:hover {
+    background-color: #f0f0f0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .table-responsive table {
+        font-size: 0.7rem;
+    }
+    
+    .sticky-bottom {
+        flex-wrap: wrap;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const lockCells = document.querySelectorAll('.lock-cell');
+    const lockedSlotsTextarea = document.getElementById('locked_slots');
+    const clearAllBtn = document.getElementById('clear-all-btn');
+    const form = document.getElementById('lock-slots-form');
+    const totalLocksSpan = document.getElementById('total-locks');
+
+    // Update locked cell count when checkboxes change
+    function updateLockCounts() {
+        const checkedCells = document.querySelectorAll('.lock-cell:checked');
+        totalLocksSpan.textContent = `Total locked: ${checkedCells.length}`;
+        
+        // Update per-section counts
+        {% for section_idx in range(section_tables|length) %}
+        const sectionLockedCount_{{ section_idx }} = document.querySelectorAll('.lock-cell[data-section-idx="{{ section_idx }}"]:checked').length;
+        const lockCountBadge_{{ section_idx }} = document.getElementById('lock-count-{{ section_idx }}');
+        if (lockCountBadge_{{ section_idx }}) {
+            lockCountBadge_{{ section_idx }}.textContent = sectionLockedCount_{{ section_idx }} + ' locked';
+        }
+        {% endfor %}
+    }
+
+    // Add click handlers to all lock cells
+    lockCells.forEach(cell => {
+        cell.addEventListener('change', updateLockCounts);
+        
+        // Make the entire cell clickable
+        cell.parentElement.style.cursor = 'pointer';
+        cell.parentElement.addEventListener('click', function(e) {
+            if (e.target.tagName !== 'INPUT') {
+                cell.checked = !cell.checked;
+                cell.dispatchEvent(new Event('change'));
+            }
+        });
+    });
+
+    // Clear all locks
+    clearAllBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (confirm('Clear all locked cells?')) {
+            lockCells.forEach(cell => {
+                cell.checked = false;
+            });
+            updateLockCounts();
+        }
+    });
+
+    // Format locked slots as CSV when form is submitted
+    form.addEventListener('submit', function(e) {
+        const lockedCells = [];
+        document.querySelectorAll('.lock-cell:checked').forEach(checkbox => {
+            lockedCells.push([
+                checkbox.dataset.section,
+                checkbox.dataset.day,
+                checkbox.dataset.period
+            ]);
+        });
+        
+        if (lockedCells.length === 0) {
+            alert('Please select at least one cell to lock before regenerating.');
+            e.preventDefault();
+            return;
+        }
+        
+        // Format as CSV for backend
+        const csv = 'SectionKey,Day,Period\n' + 
+                    lockedCells.map(cell => cell.join(',')).join('\n');
+        lockedSlotsTextarea.value = csv;
+    });
+
+    // Initialize counts
+    updateLockCounts();
+});
+</script>
+{% endblock %}

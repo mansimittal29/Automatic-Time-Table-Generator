@@ -1,0 +1,36 @@
+name: Python CI
+
+on:
+  push:
+    paths:
+      - "timetable-generator/**"
+  pull_request:
+    paths:
+      - "timetable-generator/**"
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: timetable-generator
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      - name: Run tests
+        env:
+          TIMETABLE_SECRET_KEY: ci-secret-key
+        run: |
+          pytest -q

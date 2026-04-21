@@ -1,0 +1,7 @@
+class_name,standard,section,subject,teacher,lectures,type,allowed_rooms,daily_max
+Class-01,Year-1,A,Mathematics,Faculty-01,4,THEORY,,2
+Class-01,Year-1,A,Programming Fundamentals,Faculty-03,4,THEORY,,2
+Class-01,Year-1,A,Programming Lab,Faculty-19,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10,2
+Class-01,Year-1,B,Mathematics,Faculty-01,4,THEORY,,2
+Class-01,Year-1,B,Programming Fundamentals,Faculty-03,4,THEORY,,2
+Class-01,Year-1,B,Programming Lab,Faculty-19,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10,2

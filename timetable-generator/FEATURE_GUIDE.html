@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management & Password Change - Feature Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+        .feature-section {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .section-title {
+            font-size: 1.8em;
+            color: #667eea;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .subsection {
+            margin: 30px 0;
+        }
+        .subsection h3 {
+            color: #764ba2;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        .feature-list {
+            list-style: none;
+            margin: 15px 0;
+        }
+        .feature-list li {
+            padding: 12px 0 12px 40px;
+            position: relative;
+            margin: 10px 0;
+            background: #f8f9ff;
+            border-left: 4px solid #667eea;
+            border-radius: 4px;
+            padding-left: 30px;
+        }
+        .feature-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 10px;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        .mock-ui {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+        .mock-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            margin: 15px 0;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .mock-table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        .mock-table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        .mock-table tr:hover {
+            background: #f8f9ff;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin: 0 4px;
+        }
+        .badge-required {
+            background: #ffc107;
+            color: #333;
+        }
+        .badge-done {
+            background: #28a745;
+            color: white;
+        }
+        .badge-active {
+            background: #17a2b8;
+            color: white;
+        }
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 4px 4px 4px 0;
+            border-radius: 4px;
+            font-size: 0.9em;
+            cursor: pointer;
+            border: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #218838;
+        }
+        .flow-diagram {
+            background: #f8f9ff;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .flow-step {
+            display: inline-block;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 20px 30px;
+            margin: 10px;
+            min-width: 180px;
+        }
+        .flow-arrow {
+            display: inline-block;
+            color: #667eea;
+            font-size: 1.5em;
+            margin: 0 10px;
+            vertical-align: middle;
+        }
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 20px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 20px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+        .comparison-table {
+            width: 100%;
+            margin: 20px 0;
+        }
+        .comparison-table th {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9ff;
+        }
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(255,255,255,0.3);
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 1.8em;
+            }
+            .feature-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>👥 User Management & Password Change</h1>
+            <p>Complete Feature Guide for Admin & Users</p>
+        </div>
+
+        <!-- ADMIN FEATURES -->
+        <div class="feature-section">
+            <div class="section-title">🔐 Admin Features</div>
+            
+            <div class="subsection">
+                <h3>📍 Access Point: Admin > User Management</h3>
+                <p><strong>Route:</strong> <span class="highlight">/admin/users</span></p>
+                <p style="margin-top: 10px;">Admin-only page accessible from the dashboard navigation.</p>
+            </div>
+
+            <div class="subsection">
+                <h3>1️⃣ Create New User</h3>
+                <div class="mock-ui">
+                    <strong>Create User Form:</strong>
+                    <div style="margin-top: 15px;">
+                        <div style="margin: 10px 0;">📝 Username: <input type="text" placeholder="e.g., john.doe" style="padding: 5px; width: 200px;"></div>
+                        <div style="margin: 10px 0;">👤 Full Name: <input type="text" placeholder="e.g., John Doe" style="padding: 5px; width: 200px;"></div>
+                        <div style="margin: 10px 0;">📧 Email: <input type="email" placeholder="e.g., john@example.com" style="padding: 5px; width: 200px;"></div>
+                        <div style="margin: 10px 0;">🔑 Password: <input type="password" placeholder="Temporary password" style="padding: 5px; width: 200px;"></div>
+                        <div style="margin: 10px 0;">👔 Role: 
+                            <select style="padding: 5px; width: 200px;">
+                                <option>ADMIN - Administrator</option>
+                                <option selected>FACULTY - Faculty Member</option>
+                                <option>HOD - Head of Department</option>
+                                <option>STUDENT - Student</option>
+                            </select>
+                        </div>
+                        <div style="margin-top: 15px;">
+                            <button class="btn btn-primary">Create User</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="success-box">
+                    ✅ <strong>Auto-Sets Flag:</strong> New users are automatically flagged with <span class="highlight">must_change_password = True</span>
+                </div>
+                <ul class="feature-list">
+                    <li>Admin sets a temporary password</li>
+                    <li>User role can be ADMIN, HOD, FACULTY, or STUDENT</li>
+                    <li>Email is optional</li>
+                    <li>Duplicate usernames are rejected</li>
+                </ul>
+            </div>
+
+            <div class="subsection">
+                <h3>2️⃣ User Management Table</h3>
+                <p style="margin-bottom: 15px;"><strong>Shows all users with detailed info and action buttons:</strong></p>
+                
+                <div class="mock-ui">
+                    <table class="mock-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th style="background: #ffc107; color: #333;">Pwd Change?</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td><strong>admin</strong></td>
+                                <td>System Admin</td>
+                                <td>-</td>
+                                <td>ADMIN</td>
+                                <td><span class="badge badge-active">ACTIVE</span></td>
+                                <td><span class="badge badge-done">Done</span></td>
+                                <td>2025-03-10 10:30</td>
+                                <td>
+                                    <button class="btn btn-danger">Deactivate</button>
+                                    <button class="btn btn-warning">Reset Pwd</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td><strong>prof_sharma</strong></td>
+                                <td>Dr. Sharma</td>
+                                <td>sharma@college.edu</td>
+                                <td>FACULTY</td>
+                                <td><span class="badge badge-active">ACTIVE</span></td>
+                                <td><span class="badge badge-required">Required</span></td>
+                                <td>2025-03-16 14:22</td>
+                                <td>
+                                    <button class="btn btn-danger">Deactivate</button>
+                                    <button class="btn btn-warning">Reset Pwd</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td><strong>hod_patel</strong></td>
+                                <td>Mr. Patel</td>
+                                <td>patel@college.edu</td>
+                                <td>HOD</td>
+                                <td style="text-decoration: line-through; opacity: 0.6;">INACTIVE</td>
+                                <td><span class="badge badge-done">Done</span></td>
+                                <td>2025-02-15 09:15</td>
+                                <td>
+                                    <button class="btn btn-success">Activate</button>
+                                    <button class="btn btn-warning">Reset Pwd</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="grid-2">
+                    <div class="success-box">
+                        <strong>🟢 "Pwd Change?" Column:</strong><br>
+                        • Yellow <span class="badge badge-required">Required</span> = User must change password<br>
+                        • Green <span class="badge badge-done">Done</span> = Password change completed
+                    </div>
+                    <div class="info-box">
+                        <strong>ℹ️ Status Column:</strong><br>
+                        • Show if user account is ACTIVE or INACTIVE<br>
+                        • Can be toggled by admin
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>3️⃣ Action Buttons</h3>
+                
+                <div style="margin: 20px 0;">
+                    <div class="warning-box">
+                        <strong>🔄 Deactivate/Activate Button</strong>
+                        <ul class="feature-list">
+                            <li>Click to toggle account status without deleting</li>
+                            <li>Inactive users cannot log in</li>
+                            <li>Admin cannot deactivate their own account (safety feature)</li>
+                            <li>Flash message confirms action</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <strong>🔑 Reset Pwd Button</strong>
+                        <ul class="feature-list">
+                            <li>Reveals inline password input field for admin to set new temp password</li>
+                            <li>User must change this on next login (flag auto-set)</li>
+                            <li>Minimum 6 characters enforced</li>
+                            <li>Flash message: "Password for [username] reset. They must change it on next login."</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mock-ui">
+                    <strong>Reset Password UI (collapsed by default):</strong>
+                    <div style="margin-top: 15px; border: 1px solid #ddd; padding: 15px; border-radius: 4px;">
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <input type="password" placeholder="New password (min 6)" style="padding: 8px; flex: 1; max-width: 200px;">
+                            <button class="btn btn-warning">Set</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- USER FEATURES -->
+        <div class="feature-section">
+            <div class="section-title">👤 User Features (First Login Flow)</div>
+            
+            <div class="subsection">
+                <h3>The Complete Flow</h3>
+                <div class="flow-diagram">
+                    <div style="display: block;">
+                        <div class="flow-step" style="border-color: #28a745; background: #d4edda;">
+                            <strong>1. Admin Creates User</strong><br>
+                            <small>Sets temporary password</small>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step">
+                            <strong>2. User Receives Credentials</strong><br>
+                            <small>Username + temp password</small>
+                        </div>
+                        <br>
+                        <div class="flow-arrow">↓</div>
+                        <br>
+                        <div class="flow-step" style="border-color: #ffc107;">
+                            <strong>3. User Logs In</strong><br>
+                            <small>Uses provided credentials</small>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step">
+                            <strong>4. Auto-Redirect</strong><br>
+                            <small>To /change-password</small>
+                        </div>
+                        <br>
+                        <div class="flow-arrow">↓</div>
+                        <br>
+                        <div class="flow-step" style="border-color: #dc3545;">
+                            <strong>5. MUST Change Password</strong><br>
+                            <small>Before accessing anything</small>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step" style="border-color: #28a745; background: #d4edda;">
+                            <strong>6. Access Dashboard</strong><br>
+                            <small>With new password</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>📍 Login Page</h3>
+                <p><strong>Route:</strong> <span class="highlight">/login</span></p>
+                
+                <div class="mock-ui">
+                    <div style="max-width: 400px; margin: 20px auto;">
+                        <h4 style="text-align: center; margin-bottom: 20px;">Sign In</h4>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px;"><strong>Username</strong></label>
+                            <input type="text" placeholder="e.g., prof_sharma" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px;"><strong>Password</strong></label>
+                            <input type="password" placeholder="Temporary password from admin" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%; padding: 10px;">Sign In</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>🔴 Auto-Redirect Enforcement</h3>
+                <div class="warning-box">
+                    <strong>⚠️ Important:</strong> When <span class="highlight">must_change_password = True</span>:
+                    <ul class="feature-list">
+                        <li>User logs in → redirected to <span class="highlight">/change-password</span></li>
+                        <li>ANY attempt to access other pages (dashboard, admin, etc.) → redirected back to <span class="highlight">/change-password</span></li>
+                        <li>Flash message appears: "You must change your password before continuing."</li>
+                        <li>Only allowed pages: <span class="highlight">/change-password</span>, <span class="highlight">/logout</span>, static files</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>🔐 Change Password Page</h3>
+                <p><strong>Route:</strong> <span class="highlight">/change-password</span> (GET & POST)</p>
+                <p><strong>Protection:</strong> @login_required</p>
+                
+                <div class="mock-ui">
+                    <div style="max-width: 500px; margin: 20px auto; border: 2px dashed #667eea; padding: 20px; border-radius: 8px;">
+                        <h4 style="text-align: center; margin-bottom: 20px;">Change Password</h4>
+                        <p style="text-align: center; font-size: 0.95em; margin-bottom: 20px; color: #666;">
+                            ⚠️ Your account requires a password change before you can continue.
+                        </p>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px;"><strong>Current Password</strong></label>
+                            <input type="password" placeholder="Enter your temporary password" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px;"><strong>New Password</strong></label>
+                            <input type="password" placeholder="At least 6 characters" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                            <small style="color: #666;">Minimum 6 characters.</small>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; margin-bottom: 5px;"><strong>Confirm New Password</strong></label>
+                            <input type="password" placeholder="Confirm new password" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-primary" style="flex: 1;">Update Password</button>
+                            <button class="btn btn-danger">Sign Out</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>ℹ️ Form Validation:</strong>
+                    <ul class="feature-list">
+                        <li><strong>Current password</strong> must match the user's current password hash</li>
+                        <li><strong>New password</strong> must be at least 6 characters</li>
+                        <li><strong>New password & Confirm</strong> must match</li>
+                        <li>Passwords are hashed with werkzeug.security before storage</li>
+                    </ul>
+                </div>
+
+                <div class="success-box">
+                    <strong>✅ On Success:</strong>
+                    <ul class="feature-list">
+                        <li>Password updated in database</li>
+                        <li><span class="highlight">must_change_password</span> flag is cleared to <strong>False</strong></li>
+                        <li>Flash message: "Password updated successfully."</li>
+                        <li>User redirected to Dashboard</li>
+                        <li>User can now access all pages normally</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>❌ Error Scenarios</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Error Condition</th>
+                            <th>Flash Message</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Current password incorrect</td>
+                            <td>"Current password is incorrect."</td>
+                            <td>Stay on form, user can retry</td>
+                        </tr>
+                        <tr>
+                            <td>New password < 6 chars</td>
+                            <td>"New password must be at least 6 characters."</td>
+                            <td>Stay on form, user can retry</td>
+                        </tr>
+                        <tr>
+                            <td>Passwords don't match</td>
+                            <td>"New passwords do not match."</td>
+                            <td>Stay on form, user can retry</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TECHNICAL DETAILS -->
+        <div class="feature-section">
+            <div class="section-title">⚙️ Technical Implementation</div>
+            
+            <div class="subsection">
+                <h3>Database Model</h3>
+                <div class="code-block">class User(UserMixin, db.Model):
+    ...
+    must_change_password = db.Column(db.Boolean, nullable=False, default=False)
+    ...</div>
+                <ul class="feature-list">
+                    <li>Column type: <span class="highlight">Boolean</span></li>
+                    <li>Default value: <span class="highlight">False</span></li>
+                    <li>Automatically migrated to existing databases</li>
+                </ul>
+            </div>
+
+            <div class="subsection">
+                <h3>Routes & Decorators</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Route</th>
+                            <th>Method</th>
+                            <th>Protection</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="highlight">/admin/users</span></td>
+                            <td>GET, POST</td>
+                            <td>@roles_required("ADMIN")</td>
+                            <td>Create users & view list</td>
+                        </tr>
+                        <tr>
+                            <td><span class="highlight">/change-password</span></td>
+                            <td>GET, POST</td>
+                            <td>@login_required</td>
+                            <td>User changes password</td>
+                        </tr>
+                        <tr>
+                            <td><span class="highlight">/admin/users/&lt;id&gt;/toggle-active</span></td>
+                            <td>POST</td>
+                            <td>@roles_required("ADMIN")</td>
+                            <td>Activate/deactivate user</td>
+                        </tr>
+                        <tr>
+                            <td><span class="highlight">/admin/users/&lt;id&gt;/reset-password</span></td>
+                            <td>POST</td>
+                            <td>@roles_required("ADMIN")</td>
+                            <td>Admin resets user password</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <h3>Request Hook: before_request</h3>
+                <div class="code-block">@app.before_request
+def enforce_password_change():
+    if not current_user.is_authenticated:
+        return
+    if getattr(current_user, "must_change_password", False):
+        allowed_endpoints = {"change_password", "logout", "static"}
+        if request.endpoint not in allowed_endpoints:
+            flash("You must change your password before continuing.", "warning")
+            return redirect(url_for("change_password"))</div>
+                <ul class="feature-list">
+                    <li>Runs on every request for authenticated users</li>
+                    <li>Checks if <span class="highlight">must_change_password = True</span></li>
+                    <li>Blocks access to all pages except password change & logout</li>
+                    <li>Non-intrusive: only redirects if flag is set</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- QUICK START -->
+        <div class="feature-section">
+            <div class="section-title">🚀 Quick Start Guide</div>
+            
+            <div class="subsection">
+                <h3>For Admins</h3>
+                <ol style="margin-left: 20px;">
+                    <li style="margin: 10px 0;">Log in with admin credentials (admin / admin123)</li>
+                    <li style="margin: 10px 0;">Go to <strong>Dashboard</strong> → <strong>Admin Tools</strong> → <strong>User Management</strong></li>
+                    <li style="margin: 10px 0;">Fill in the "Create User" form:
+                        <ul style="margin: 10px 0 10px 20px;">
+                            <li>Username (required)</li>
+                            <li>Full Name (required)</li>
+                            <li>Email (optional)</li>
+                            <li>Temporary Password (required, min 6 chars)</li>
+                            <li>Role (select from dropdown)</li>
+                        </ul>
+                    </li>
+                    <li style="margin: 10px 0;">Click <strong>Create User</strong></li>
+                    <li style="margin: 10px 0;">Share username + password with user</li>
+                    <li style="margin: 10px 0;">Optional: Use <strong>Reset Pwd</strong> or <strong>Deactivate/Activate</strong> buttons as needed</li>
+                </ol>
+            </div>
+
+            <div class="subsection">
+                <h3>For New Users (First Login)</h3>
+                <ol style="margin-left: 20px;">
+                    <li style="margin: 10px 0;">Navigate to login page: <span class="highlight">/login</span></li>
+                    <li style="margin: 10px 0;">Enter username provided by admin</li>
+                    <li style="margin: 10px 0;">Enter temporary password</li>
+                    <li style="margin: 10px 0;">Click <strong>Sign In</strong></li>
+                    <li style="margin: 10px 0;">You will be automatically redirected to <strong>Change Password</strong></li>
+                    <li style="margin: 10px 0;">Fill in the password change form:
+                        <ul style="margin: 10px 0 10px 20px;">
+                            <li>Current Password (the temp password you received)</li>
+                            <li>New Password (your choice, min 6 characters)</li>
+                            <li>Confirm New Password</li>
+                        </ul>
+                    </li>
+                    <li style="margin: 10px 0;">Click <strong>Update Password</strong></li>
+                    <li style="margin: 10px 0;">You're now logged in and can access the dashboard normally!</li>
+                </ol>
+            </div>
+
+            <div class="info-box">
+                <strong>💡 Pro Tips:</strong>
+                <ul class="feature-list">
+                    <li>Admins can reset any user's password anytime via the "Reset Pwd" button</li>
+                    <li>Deactivating a user doesn't delete them—just prevents login</li>
+                    <li>The "Pwd Change?" column makes it easy to see who hasn't set their own password yet</li>
+                    <li>Users CANNOT bypass the password change—the before_request hook enforces it</li>
+                </ul>
+            </div>
+        </div>
+
+        <footer>
+            <p>Timetable Scheduler™ | User Management & Authentication Features</p>
+            <p style="margin-top: 10px; opacity: 0.8;">Last Updated: March 17, 2026</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BBSBEC Timetable Portal | User Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="result-body">
+    <div class="bg-orb orb-3"></div>
+    <div class="bg-orb orb-4"></div>
+
+    <main class="container py-5">
+        <section class="hero-panel result-panel">
+            <p class="portal-college-name">Baba Banda Singh Bahadur Engineering College, Fatehgarh Sahib</p>
+            <p class="eyebrow mb-2">Administrator Controls</p>
+            <h1 class="display-title mb-3">User Management</h1>
+            <p class="hero-copy mb-3">Create role-based portal users and enforce credential and activation governance.</p>
+            <div class="d-flex flex-wrap gap-2">
+                <a class="btn btn-outline-light" href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a class="btn btn-outline-light" href="{{ url_for('index') }}">Generate Timetable</a>
+                <a class="btn btn-outline-light" href="{{ url_for('logout') }}">Sign Out</a>
+            </div>
+        </section>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <section class="card-surface p-3 p-md-4 mt-4">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} mb-2" role="alert">{{ message }}</div>
+                    {% endfor %}
+                </section>
+            {% endif %}
+        {% endwith %}
+
+        <section class="card-surface p-3 p-md-4 mt-4">
+            <h2 class="mini-title mb-3">Create User</h2>
+            
+            <!-- Security Policy Note -->
+            <div class="alert alert-info" role="alert" style="font-size: 0.9rem; margin-bottom: 1.5rem;">
+                <strong>Password Policy:</strong> All passwords must be minimum 10 characters, no leading/trailing spaces. User will be required to change on first login.
+            </div>
+
+            <form method="post" class="row g-3" novalidate>
+                <div class="col-md-3">
+                    <label class="form-label form-label-strong" for="username">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label form-label-strong" for="full_name">Full Name</label>
+                    <input type="text" class="form-control" id="full_name" name="full_name" required>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label form-label-strong" for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label form-label-strong" for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required minlength="10" data-admin-pwd>
+                    <div class="form-text" style="margin-top: 0.3rem;">Minimum 10 chars</div>
+                    <div id="admin-password-feedback" class="form-text" style="margin-top: 0.3rem; color: var(--brand-500);\"></div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label form-label-strong" for="role_code">Role</label>
+                    <select class="form-control" id="role_code" name="role_code" required>
+                        {% for role in roles %}
+                            <option value="{{ role.code }}">{{ role.code }} - {{ role.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label form-label-strong" for="profile_class_name">Profile Class (Student)</label>
+                    <input type="text" class="form-control" id="profile_class_name" name="profile_class_name" placeholder="Class-01">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label form-label-strong" for="profile_standard">Profile Standard (Student)</label>
+                    <input type="text" class="form-control" id="profile_standard" name="profile_standard" placeholder="Year-1">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label form-label-strong" for="profile_section_code">Profile Section (Student)</label>
+                    <input type="text" class="form-control" id="profile_section_code" name="profile_section_code" placeholder="A">
+                </div>
+                <div class="col-12 d-flex gap-2 mt-2">
+                    <button type="submit" class="btn btn-generate" id="create-user-btn">Create User</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="card-surface p-3 p-md-4 mt-4">
+            <h2 class="mini-title mb-3">Existing Users</h2>
+            <div class="table-responsive">
+                <table class="table timetable-table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Profile</th>
+                            <th>Status</th>
+                            <th>Pwd Change?</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td>{{ user.id }}</td>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.full_name }}</td>
+                                <td>{{ user.email or '-' }}</td>
+                                <td>{{ user.role.code if user.role else '-' }}</td>
+                                <td>
+                                    {% if user.profile_class_name and user.profile_standard and user.profile_section_code %}
+                                        {{ user.profile_class_name }} | {{ user.profile_standard }} | {{ user.profile_section_code }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>{{ 'ACTIVE' if user.is_active else 'INACTIVE' }}</td>
+                                <td>
+                                    {% if user.must_change_password %}
+                                        <span class="badge bg-warning text-dark">Required</span>
+                                    {% else %}
+                                        <span class="badge bg-success">Done</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ user.created_at.strftime('%Y-%m-%d %H:%M') if user.created_at else '-' }}</td>
+                                <td>
+                                    <div class="inline-actions">
+                                        <!-- Edit user details -->
+                                        <button type="button" class="btn btn-sm btn-outline-primary"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#edit-user-{{ user.id }}"
+                                            aria-expanded="false">
+                                            Edit
+                                        </button>
+                                        <!-- Toggle active/inactive -->
+                                        <form method="post" action="{{ url_for('toggle_user_active', user_id=user.id) }}" class="inline-form">
+                                            <button type="submit" class="btn btn-sm {{ 'btn-outline-danger' if user.is_active else 'btn-outline-success' }}">
+                                                {{ 'Deactivate' if user.is_active else 'Activate' }}
+                                            </button>
+                                        </form>
+                                        <!-- Reset password -->
+                                        <button type="button" class="btn btn-sm btn-outline-warning"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#reset-pwd-{{ user.id }}"
+                                            aria-expanded="false">
+                                            Reset Pwd
+                                        </button>
+                                    </div>
+                                    <div class="collapse mt-2" id="edit-user-{{ user.id }}">
+                                        <form method="post" action="{{ url_for('admin_edit_user', user_id=user.id) }}" class="row g-2 compact-inline-form">
+                                            <div class="col-md-4">
+                                                <input type="text" class="form-control form-control-sm compact-input" name="username"
+                                                    placeholder="Username" value="{{ user.username }}" required>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input type="text" class="form-control form-control-sm compact-input" name="full_name"
+                                                    placeholder="Full name" value="{{ user.full_name }}" required>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input type="email" class="form-control form-control-sm compact-input" name="email"
+                                                    placeholder="Email" value="{{ user.email or '' }}">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <select class="form-control form-control-sm compact-input" name="role_code" required>
+                                                    {% for role in roles %}
+                                                        <option value="{{ role.code }}" {% if user.role and user.role.code == role.code %}selected{% endif %}>{{ role.code }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" class="form-control form-control-sm compact-input" name="profile_class_name"
+                                                    placeholder="Profile class" value="{{ user.profile_class_name or '' }}">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" class="form-control form-control-sm compact-input" name="profile_standard"
+                                                    placeholder="Profile standard" value="{{ user.profile_standard or '' }}">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" class="form-control form-control-sm compact-input" name="profile_section_code"
+                                                    placeholder="Profile section" value="{{ user.profile_section_code or '' }}">
+                                            </div>
+                                            <div class="col-12 d-flex gap-2">
+                                                <button type="submit" class="btn btn-sm btn-primary">Save Changes</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="collapse mt-2" id="reset-pwd-{{ user.id }}">
+                                        <form method="post" action="{{ url_for('admin_reset_password', user_id=user.id) }}" class="compact-inline-form">
+                                            <input type="password" class="form-control form-control-sm compact-input admin-reset-pwd" name="new_password"
+                                                placeholder="New password (min 10)" minlength="10" required>
+                                            <button type="submit" class="btn btn-sm btn-warning">Set</button>
+                                            <small class="d-block form-text" style="margin-top: 0.3rem;\">Must be 10+ characters, no leading/trailing spaces</small>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="10" class="text-center text-muted">No users found.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Real-time password policy feedback for admin create/reset
+        function setupPasswordValidation(inputSelector, feedbackSelector) {
+            const inputs = document.querySelectorAll(inputSelector);
+            inputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    const errors = [];
+                    if (this.value.length > 0 && this.value.length < 10) {
+                        errors.push(`Too short (${this.value.length}/10 chars)`);
+                    }
+                    if (this.value !== this.value.trim()) {
+                        errors.push('Remove leading/trailing spaces');
+                    }
+                    
+                    // Find and update feedback div if it exists
+                    const feedback = feedbackSelector ? this.closest('form').querySelector(feedbackSelector) : null;
+                    if (feedback) {
+                        if (this.value.length === 0) {
+                            feedback.textContent = '';
+                        } else if (errors.length > 0) {
+                            feedback.innerHTML = '⚠ ' + errors.join(', ');
+                            feedback.style.color = '#c74945';
+                        } else {
+                            feedback.innerHTML = '✓ Meets policy';
+                            feedback.style.color = '#2f7757';
+                        }
+                    }
+                });
+            });
+        }
+
+        // Setup validation for create user form
+        const adminPwdInput = document.getElementById('password');
+        const feedbackDiv = document.getElementById('admin-password-feedback');
+        const createBtn = document.getElementById('create-user-btn');
+        
+        if (adminPwdInput) {
+            adminPwdInput.addEventListener('input', function() {
+                const errors = [];
+                if (this.value.length > 0 && this.value.length < 10) {
+                    errors.push(`Too short (${this.value.length}/10 chars)`);
+                }
+                if (this.value !== this.value.trim()) {
+                    errors.push('Remove leading/trailing spaces');
+                }
+                
+                if (this.value.length === 0) {
+                    feedbackDiv.textContent = '';
+                    createBtn.disabled = false;
+                } else if (errors.length > 0) {
+                    feedbackDiv.innerHTML = '⚠ ' + errors.join(', ');
+                    feedbackDiv.style.color = '#c74945';
+                    createBtn.disabled = true;
+                } else {
+                    feedbackDiv.innerHTML = '✓ Meets policy';
+                    feedbackDiv.style.color = '#2f7757';
+                    createBtn.disabled = false;
+                }
+            });
+        }
+
+        // Setup validation for admin reset password forms
+        setupPasswordValidation('[name="new_password"][minlength="10"]');
+    </script>
+</body>
+</html>

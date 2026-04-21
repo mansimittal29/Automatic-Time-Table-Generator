@@ -1,0 +1,760 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BBSBEC Timetable Portal | Timetable Views</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="result-body">
+    <div class="bg-orb orb-3"></div>
+    <div class="bg-orb orb-4"></div>
+
+    <main class="container py-5">
+        <section class="hero-panel result-panel">
+            <p class="portal-college-name">Baba Banda Singh Bahadur Engineering College, Fatehgarh Sahib</p>
+            <p class="eyebrow mb-2">{% if view_mode == 'published' %}Published Timetable{% else %}Generation Complete{% endif %}</p>
+            <h1 class="display-title mb-4">{% if view_mode == 'published' %}BBSBEC Published Timetable{% else %}BBSBEC Timetable View{% endif %}</h1>
+            <div class="d-flex flex-wrap gap-3">
+                {% if role_code in ['ADMIN', 'HOD'] %}
+                <a class="btn btn-generate" href="{{ url_for('index') }}">Generate New Timetable</a>
+                {% endif %}
+                <a class="btn btn-outline-light" href="{{ url_for('dashboard') }}">Dashboard</a>
+                {% if latest_version and role_code in ['ADMIN', 'HOD'] %}
+                <a class="btn btn-outline-light" href="{{ url_for('view_timetable_version', version_id=latest_version.id) }}">Open This Version</a>
+                {% endif %}
+                {% if latest_version %}
+                <a class="btn btn-outline-light" href="{{ url_for('export_timetable_pdf', version_id=latest_version.id) }}">Export PDF</a>
+                {% elif view_mode in ['published', 'upcoming'] %}
+                <a class="btn btn-outline-light" href="{{ url_for('export_timetable_pdf') }}">Export PDF</a>
+                {% endif %}
+                <a class="btn btn-outline-light" href="{{ url_for('logout') }}">Sign Out</a>
+            </div>
+
+            {% if latest_version and role_code in ['ADMIN', 'HOD'] %}
+            <div class="d-flex flex-wrap align-items-center gap-3 mt-4 pt-3" style="border-top: 1px solid rgba(255,255,255,0.15);">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="tiny-chip" style="background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.28); color: #fff;">Version</span>
+                    <span style="color: #fff; font-weight: 700;">{{ latest_version.version_label }}</span>
+                </div>
+                <span class="status-pill status-{{ latest_version.status }}">{{ latest_version.status | capitalize }}</span>
+
+                {% if latest_version.status == 'draft' and role_code in ['ADMIN', 'HOD'] %}
+                <form method="POST" action="{{ url_for('approve_timetable_version', version_id=latest_version.id) }}" style="margin: 0;">
+                    <button type="submit" class="btn btn-sm btn-status-approve">
+                        Approve
+                    </button>
+                </form>
+                {% endif %}
+
+                {% if latest_version.status == 'approved' and role_code == 'ADMIN' %}
+                <form method="POST" action="{{ url_for('publish_timetable_version', version_id=latest_version.id) }}" style="margin: 0;">
+                    <button type="submit" class="btn btn-sm btn-status-publish">
+                        Publish
+                    </button>
+                </form>
+                {% endif %}
+
+                {% if latest_version.status == 'published' %}
+                <span style="color: #10b981; font-size: 0.85rem; font-weight: 600;">&#10003; Live &amp; visible to all users</span>
+                {% endif %}
+            </div>
+            {% endif %}
+        </section>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <section class="card-surface p-3 p-md-4 mt-4">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} mb-2" role="alert">{{ message }}</div>
+                    {% endfor %}
+                </section>
+            {% endif %}
+        {% endwith %}
+
+        <section class="card-surface p-3 p-md-4 mt-4">
+            <div class="section-header d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                <h2 class="mini-title mb-0">Download Timetable</h2>
+                <span class="section-meta">PDF for single/multiple/all, JPG for single card only</span>
+            </div>
+            <form method="GET" action="{{ url_for('export_timetable_pdf') }}" id="export-filter-form" class="row g-3">
+                {% if latest_version %}
+                <input type="hidden" name="version_id" value="{{ latest_version.id }}">
+                {% endif %}
+
+                <div class="col-md-3">
+                    <label for="export-view-kind" class="form-label form-label-strong">Category</label>
+                    <select class="form-control" id="export-view-kind" name="view_kind">
+                        <option value="all" selected>Whole Timetable Set (All Sections)</option>
+                        <option value="section">Section Timetable</option>
+                        <option value="class">Class Timetable</option>
+                        <option value="faculty">Faculty Timetable</option>
+                        <option value="room">Room Timetable (Lab/Classroom)</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="export-selection-mode" class="form-label form-label-strong">Selection Mode</label>
+                    <select class="form-control" id="export-selection-mode" name="selection_mode">
+                        <option value="all" selected>All</option>
+                        <option value="single">Single</option>
+                        <option value="multiple">Multiple</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="export-format" class="form-label form-label-strong">Format</label>
+                    <select class="form-control" id="export-format" name="export_format">
+                        <option value="pdf" selected>PDF</option>
+                        <option value="jpg">JPG (single only)</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-generate w-100">Download</button>
+                </div>
+
+                <div class="col-12" id="export-target-wrap">
+                    <label for="export-targets" class="form-label form-label-strong">Targets</label>
+                    <select class="form-control" id="export-targets" name="selected_target" multiple size="6"></select>
+                    <div class="helper-note mt-2" id="export-target-hint">
+                        Choose category and mode to select specific timetable targets. In All mode, targets are ignored.
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        {% if show_timetable_metrics %}
+        <section class="metric-grid mt-4">
+            <article class="metric-card">
+                <div class="metric-label">Sections</div>
+                <div class="metric-value">{{ metrics_summary.section_count }}</div>
+            </article>
+            <article class="metric-card">
+                <div class="metric-label">Classes</div>
+                <div class="metric-value">{{ metrics_summary.class_count }}</div>
+            </article>
+            <article class="metric-card">
+                <div class="metric-label">Faculty</div>
+                <div class="metric-value">{{ metrics_summary.faculty_count }}</div>
+            </article>
+            <article class="metric-card">
+                <div class="metric-label">Rooms</div>
+                <div class="metric-value">{{ metrics_summary.room_count }}</div>
+            </article>
+            <article class="metric-card">
+                <div class="metric-label">Teaching Slots</div>
+                <div class="metric-value">{{ metrics_summary.total_slots }}</div>
+            </article>
+            <article class="metric-card">
+                <div class="metric-label">Scheduled</div>
+                <div class="metric-value">{{ metrics_summary.scheduled_slots }}</div>
+            </article>
+            <article class="metric-card">
+                <div class="metric-label">Utilization</div>
+                <div class="metric-value">{{ metrics_summary.utilization_percent }}%</div>
+            </article>
+        </section>
+        {% endif %}
+
+        <!-- Scenario Comparison Results (if multi-scenario run) -->
+        {% if scenario_results %}
+        <section class="card-surface p-3 p-md-4 mt-4">
+            <div class="section-header d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                <h2 class="mini-title mb-0">
+                    <i class="fas fa-random"></i> Scenario Comparison Results
+                    <span class="section-meta" style="font-weight: normal; margin-left: 10px;">{{ scenario_results|length }} runs</span>
+                </h2>
+            </div>
+            {% if summary.scenario_compare %}
+            <div class="alert alert-success mb-3">
+                <strong>✓ Best Scenario Selected:</strong> 
+                Automatically chosen from {{ summary.scenario_compare.runs }} runs
+                (Rank: <strong>{{ "%.1f"|format(summary.scenario_compare.best_rank) }}</strong>)
+            </div>
+            {% endif %}
+
+            <div class="table-responsive">
+                <table class="table table-sm table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Status</th>
+                            <th>Rank Score</th>
+                            <th>Optimization Score</th>
+                            <th>Utilization %</th>
+                            <th>Issues</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in scenario_results %}
+                        <tr {% if result.seed == summary.scenario_compare.best_seed %}class="table-success font-weight-bold"{% elif result.status == 'failed' %}class="table-danger"{% endif %}>
+                            <td>
+                                {% if result.status == 'ok' %}
+                                <span class="badge bg-success">✓ OK</span>
+                                {% else %}
+                                <span class="badge bg-danger">✗ Failed</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if result.status == 'ok' %}
+                                <strong>{{ "%.2f"|format(result.rank) }}</strong>
+                                {% else %}
+                                —
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if result.status == 'ok' %}
+                                {{ result.score }}
+                                {% else %}
+                                —
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if result.status == 'ok' %}
+                                <strong>{{ result.utilization_percent }}%</strong>
+                                {% else %}
+                                —
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if result.status == 'ok' %}
+                                {% if result.issue_count > 0 %}
+                                <span class="badge bg-warning">{{ result.issue_count }}</span>
+                                {% else %}
+                                <span class="text-success">0</span>
+                                {% endif %}
+                                {% else %}
+                                <small class="text-muted">{{ result.reason[:40] }}{% if result.reason|length > 40 %}...{% endif %}</small>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <small class="text-muted mt-3 d-block">
+                <strong>Note:</strong> Best scenario (highlighted in green) was automatically selected based on optimization score, utilization, and issue count.
+            </small>
+        </section>
+        {% endif %}
+
+        <section class="card-surface p-3 p-md-4 mt-4">
+            <div class="row g-3 align-items-end">
+                <div class="col-lg-7">
+                    <label for="result-search" class="form-label form-label-strong">Search Timetables</label>
+                    <input type="text" class="form-control" id="result-search" placeholder="Search by class, standard, section, faculty, or room">
+                </div>
+                <div class="col-lg-3">
+                    <label for="result-kind" class="form-label form-label-strong">Filter Type</label>
+                    <select class="form-control" id="result-kind">
+                        <option value="all">All</option>
+                        <option value="class">Class</option>
+                        <option value="faculty">Faculty</option>
+                        <option value="room">Room</option>
+                        <option value="section">Section</option>
+                    </select>
+                </div>
+                <div class="col-lg-2 d-flex align-items-end">
+                    <button type="button" class="btn btn-outline-dark w-100" id="clear-result-search">Clear</button>
+                </div>
+            </div>
+            <div class="d-flex flex-wrap gap-2 mt-3">
+                <span class="section-meta" id="result-search-count">Showing all timetable cards</span>
+            </div>
+            <div class="helper-note mt-2 d-none" id="result-search-empty">No timetable cards match the current search.</div>
+        </section>
+
+        {% if latest_version and role_code in ['ADMIN', 'HOD'] %}
+        <section class="card-surface p-3 p-md-4 mt-4">
+            <div class="section-header d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                <h2 class="mini-title mb-0">Manual Timetable Edit</h2>
+                <span class="section-meta">Editing {{ latest_version.version_label }}</span>
+            </div>
+            <p class="helper-note mb-3">
+                Click a slot for quick edits, or drag one scheduled slot and drop it onto a target slot to move it.
+                All class/faculty/room/section views are regenerated from the same updated snapshot.
+            </p>
+            <p class="helper-note mb-2">Live clash hints appear during drag, and final conflict validation runs before save.</p>
+            <div class="manual-edit-selection-summary mb-3" id="manual-edit-selection-summary">No slot selected yet. Choose fields manually, or click a slot below.</div>
+            <div class="manual-edit-live-warning d-none mb-3" id="manual-edit-live-warning" role="status" aria-live="polite"></div>
+            <form id="manual-edit-form" method="POST" action="{{ url_for('manual_edit_timetable_version', version_id=latest_version.id) }}" class="row g-3">
+                <input type="hidden" id="manual-edit-source-section-key" name="source_section_key" value="">
+                <input type="hidden" id="manual-edit-source-day" name="source_day_index" value="">
+                <input type="hidden" id="manual-edit-source-period" name="source_period_index" value="">
+                <div class="col-md-3">
+                    <label for="manual-edit-source" class="form-label form-label-strong">Edit From</label>
+                    <select class="form-control" id="manual-edit-source" name="edit_source">
+                        <option value="section" selected>Section Timetable</option>
+                        <option value="faculty">Faculty Timetable</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4" id="manual-edit-section-wrap">
+                    <label for="manual-edit-section" class="form-label form-label-strong">Section</label>
+                    <select class="form-control" id="manual-edit-section" name="section_key">
+                        {% for table in section_tables %}
+                        <option value="{{ table.section_key }}">{{ table.section_key }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-4 d-none" id="manual-edit-faculty-wrap">
+                    <label for="manual-edit-faculty" class="form-label form-label-strong">Faculty</label>
+                    <select class="form-control" id="manual-edit-faculty" name="faculty_name">
+                        <option value="">Select Faculty</option>
+                        {% for table in faculty_tables %}
+                        <option value="{{ table.teacher }}">{{ table.teacher }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="manual-edit-day" class="form-label form-label-strong">Day</label>
+                    <select class="form-control" id="manual-edit-day" name="day_index" required>
+                        {% for day in days %}
+                        <option value="{{ loop.index }}">{{ day }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="manual-edit-period" class="form-label form-label-strong">Period</label>
+                    <select class="form-control" id="manual-edit-period" name="period_index" required>
+                        {% for period in periods %}
+                        <option value="{{ loop.index }}">{{ period }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="manual-edit-action" class="form-label form-label-strong">Edit Action</label>
+                    <select class="form-control" id="manual-edit-action" name="edit_action">
+                        <option value="theory" selected>Set Theory Slot</option>
+                        <option value="lab_double">Set LAB Double Slot</option>
+                        <option value="move">Move Slot (drag-drop)</option>
+                        <option value="lock_slot">Lock Slot</option>
+                        <option value="unlock_slot">Unlock Slot</option>
+                        <option value="clear">Clear Slot</option>
+                    </select>
+                </div>
+
+                <div class="col-12" id="manual-edit-detail-fields">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label for="manual-edit-subject" class="form-label form-label-strong">Subject</label>
+                            <input type="text" class="form-control" id="manual-edit-subject" name="subject" list="manual-edit-subject-options" placeholder="e.g. Data Structures">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="manual-edit-teacher" class="form-label form-label-strong">Faculty Name</label>
+                            <input type="text" class="form-control" id="manual-edit-teacher" name="teacher" list="manual-edit-teacher-options" placeholder="e.g. Faculty-015">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="manual-edit-room" class="form-label form-label-strong">Room / Lab</label>
+                            <input type="text" class="form-control" id="manual-edit-room" name="room" list="manual-edit-room-options" placeholder="e.g. CR-101 or LAB-05">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label for="manual-edit-note" class="form-label form-label-strong">Note (Optional)</label>
+                    <input type="text" class="form-control" id="manual-edit-note" name="edit_note" placeholder="Reason for manual adjustment">
+                </div>
+
+                <div class="col-12 d-flex flex-wrap gap-2 align-items-center">
+                    <button type="button" class="btn btn-outline-secondary" id="manual-edit-set-clear">Set Action: Clear Slot</button>
+                    <button type="submit" class="btn btn-generate">Apply Edit</button>
+                    <span class="helper-note">Changes are saved to this draft version and synchronized across all timetable views.</span>
+                </div>
+            </form>
+            <datalist id="manual-edit-subject-options">
+                {% if summary and summary.subject_loads %}
+                    {% for subject_name, _load in summary.subject_loads.items() %}
+                        <option value="{{ subject_name }}"></option>
+                    {% endfor %}
+                {% endif %}
+            </datalist>
+            <datalist id="manual-edit-teacher-options">
+                {% for faculty_table in faculty_tables %}
+                    <option value="{{ faculty_table.teacher }}"></option>
+                {% endfor %}
+            </datalist>
+            <datalist id="manual-edit-room-options">
+                {% for room_table in room_tables %}
+                    <option value="{{ room_table.room }}"></option>
+                {% endfor %}
+            </datalist>
+            <div id="manual-slot-action-bar" class="manual-slot-action-bar d-none" role="toolbar" aria-label="Quick slot edit actions">
+                <span class="manual-slot-action-title" id="manual-slot-action-title">Quick actions</span>
+                <div class="manual-slot-action-buttons">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" id="manual-slot-action-clear">Clear</button>
+                    <button type="button" class="btn btn-sm btn-outline-primary" id="manual-slot-action-theory">Theory</button>
+                    <button type="button" class="btn btn-sm btn-outline-primary" id="manual-slot-action-lab">LAB</button>
+                    <button type="button" class="btn btn-sm btn-outline-dark" id="manual-slot-action-lock">Lock</button>
+                    <button type="button" class="btn btn-sm btn-outline-dark" id="manual-slot-action-unlock">Unlock</button>
+                </div>
+                <button type="button" class="manual-slot-action-close" id="manual-slot-action-close" aria-label="Close quick actions">x</button>
+            </div>
+        </section>
+        {% endif %}
+
+        <section class="card-surface p-3 p-md-4 mt-4">
+            <div class="section-header d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                <h2 class="mini-title mb-0">Class-Wise Timetables</h2>
+                <span class="section-meta">{{ summary.class_count }} classes</span>
+            </div>
+            <p class="helper-note mb-0">
+                Review complete section groupings under each class for academic planning and department-level validation.
+            </p>
+        </section>
+
+        {% for class_table in class_tables %}
+            {% set class_stats = summary.class_stats.get(class_table.class_key) %}
+            <section class="card-surface p-3 p-md-4 mt-4" data-result-card data-result-kind="class" data-result-search="{{ class_table.class_name }} {{ class_table.standard }} {{ class_table.class_key }} {% for section_table in class_table.sections %}{{ section_table.section }} {{ section_table.section_key }} {% endfor %}">
+                <div class="section-header d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                    <h2 class="mini-title mb-0">Class: {{ class_table.class_name }} | Standard {{ class_table.standard }}</h2>
+                    {% if class_stats %}
+                        <span class="section-meta">
+                            Sections: {{ class_stats.section_count }} | {{ class_stats.scheduled_slots }}/{{ class_stats.total_slots }} teaching slots
+                            ({{ class_stats.utilization_percent }}%)
+                        </span>
+                    {% endif %}
+                </div>
+
+                {% for section_table in class_table.sections %}
+                    <div class="section-header d-flex flex-wrap justify-content-between align-items-center gap-2 mt-3 mb-2">
+                        <h3 class="mini-title mb-0">Section {{ section_table.section }}</h3>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table timetable-table align-middle mb-3">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="day-col">Day</th>
+                                    {% for period in periods %}
+                                        <th scope="col">{{ period }}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for day_name in days %}
+                                    {% set day_index = loop.index0 %}
+                                    <tr>
+                                        <th scope="row">{{ day_name }}</th>
+                                        {% for cell in section_table.timetable[day_index] %}
+                                            {% set period_number = loop.index %}
+                                            {% set has_group_lab_details = cell and cell.lab_group_details is defined and cell.lab_group_details %}
+                                            <td
+                                                class="{% if period_number not in lunch_break_periods_by_day.get(day_index, []) and not has_group_lab_details %}manual-slot-cell{% endif %}{% if cell and cell.is_locked %} manual-slot-locked{% endif %}"
+                                                data-slot-editable="{% if period_number in lunch_break_periods_by_day.get(day_index, []) or has_group_lab_details %}0{% else %}1{% endif %}"
+                                                data-section-key="{{ section_table.section_key }}"
+                                                data-day-index="{{ day_index + 1 }}"
+                                                data-period-index="{{ period_number }}"
+                                                data-subject="{{ cell.subject if cell else '' }}"
+                                                data-teacher="{{ cell.teacher if cell else '' }}"
+                                                data-room="{{ cell.room if cell else '' }}"
+                                                data-is-lab="{% if cell and cell.is_lab %}1{% else %}0{% endif %}"
+                                                data-is-locked="{% if cell and cell.is_locked %}1{% else %}0{% endif %}"
+                                                data-is-empty="{% if cell %}0{% else %}1{% endif %}"
+                                            >
+                                                {% if period_number in lunch_break_periods_by_day.get(day_index, []) %}
+                                                    <div class="lunch-cell">Lunch Break</div>
+                                                {% elif has_group_lab_details %}
+                                                    <div class="cell-subject">
+                                                        LAB Group Session
+                                                        <span class="lab-badge">LAB</span>
+                                                    </div>
+                                                    <div class="lab-group-split">
+                                                        {% for subgroup in cell.lab_group_details %}
+                                                            <div class="lab-group-part">
+                                                                <div class="tiny-note">{{ subgroup.group }}</div>
+                                                                <div class="lab-group-subject">{{ subgroup.subject }}</div>
+                                                                <div class="cell-meta">{{ subgroup.teacher }}</div>
+                                                                <div class="cell-meta">{{ subgroup.room }}</div>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                {% elif cell %}
+                                                    <div class="cell-subject">
+                                                        {{ cell.subject }}
+                                                        {% if cell.is_lab %}
+                                                            <span class="lab-badge">LAB</span>
+                                                        {% endif %}
+                                                        {% if cell.is_locked %}
+                                                            <span class="lock-badge">LOCKED</span>
+                                                        {% endif %}
+                                                    </div>
+                                                    {% if cell.is_lab and cell.session_length and cell.session_length > 1 %}
+                                                        <div class="tiny-note">Block {{ cell.session_part }}/{{ cell.session_length }}</div>
+                                                    {% endif %}
+                                                    <div class="cell-meta">{{ cell.teacher }}</div>
+                                                    <div class="cell-meta">{{ cell.room }}</div>
+                                                {% else %}
+                                                    <div class="empty-cell">Free Slot</div>
+                                                {% endif %}
+                                            </td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endfor %}
+            </section>
+        {% endfor %}
+
+        <section class="card-surface p-3 p-md-4 mt-4">
+            <div class="section-header d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                <h2 class="mini-title mb-0">Faculty-Wise Timetables</h2>
+                <span class="section-meta">{{ summary.faculty_count }} faculty timetables</span>
+            </div>
+            <p class="helper-note mb-0">
+                Use this view for workload verification and faculty-facing schedule communication.
+            </p>
+        </section>
+
+        {% for table in faculty_tables %}
+            {% set faculty_stats = summary.faculty_stats.get(table.teacher) %}
+            <section class="card-surface p-3 p-md-4 mt-4" data-result-card data-result-kind="faculty" data-result-search="{{ table.teacher }}">
+                <div class="section-header d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                    <h2 class="mini-title mb-0">Faculty: {{ table.teacher }}</h2>
+                    {% if faculty_stats %}
+                        <span class="section-meta">
+                            {{ faculty_stats.scheduled_slots }}/{{ faculty_stats.total_slots }} teaching slots
+                            ({{ faculty_stats.utilization_percent }}%)
+                        </span>
+                    {% endif %}
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table timetable-table align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="day-col">Day</th>
+                                {% for period in periods %}
+                                    <th scope="col">{{ period }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for day_name in days %}
+                                {% set day_index = loop.index0 %}
+                                <tr>
+                                    <th scope="row">{{ day_name }}</th>
+                                    {% for cell in table.timetable[day_index] %}
+                                        {% set period_number = loop.index %}
+                                        <td
+                                            class="{% if cell and ('conflicts' not in cell) and period_number not in lunch_break_periods_by_day.get(day_index, []) %}manual-slot-cell{% endif %}{% if cell and ('conflicts' not in cell) and cell.is_locked %} manual-slot-locked{% endif %}"
+                                            data-slot-editable="{% if period_number in lunch_break_periods_by_day.get(day_index, []) %}0{% elif cell and ('conflicts' in cell) %}0{% elif cell %}1{% else %}0{% endif %}"
+                                            data-section-key="{{ cell.section_key if cell and ('conflicts' not in cell) else '' }}"
+                                            data-day-index="{{ day_index + 1 }}"
+                                            data-period-index="{{ period_number }}"
+                                            data-subject="{{ cell.subject if cell and ('conflicts' not in cell) else '' }}"
+                                            data-teacher="{{ cell.teacher if cell and ('conflicts' not in cell) else '' }}"
+                                            data-room="{{ cell.room if cell and ('conflicts' not in cell) else '' }}"
+                                            data-is-lab="{% if cell and ('conflicts' not in cell) and cell.is_lab %}1{% else %}0{% endif %}"
+                                            data-is-locked="{% if cell and ('conflicts' not in cell) and cell.is_locked %}1{% else %}0{% endif %}"
+                                            data-is-empty="{% if cell and ('conflicts' not in cell) %}0{% else %}1{% endif %}"
+                                        >
+                                            {% if period_number in lunch_break_periods_by_day.get(day_index, []) %}
+                                                <div class="lunch-cell">Lunch Break</div>
+                                            {% elif cell and ('conflicts' in cell) %}
+                                                <div class="cell-subject text-danger">Conflict</div>
+                                                <div class="cell-meta">Multiple classes assigned</div>
+                                            {% elif cell %}
+                                                <div class="cell-subject">
+                                                    {{ cell.subject }}
+                                                    {% if cell.is_lab %}
+                                                        <span class="lab-badge">LAB</span>
+                                                    {% endif %}
+                                                    {% if cell.is_locked %}
+                                                        <span class="lock-badge">LOCKED</span>
+                                                    {% endif %}
+                                                </div>
+                                                {% if cell.is_lab and cell.session_length and cell.session_length > 1 %}
+                                                    <div class="tiny-note">Block {{ cell.session_part }}/{{ cell.session_length }}</div>
+                                                {% endif %}
+                                                <div class="cell-meta">{{ cell.class_name }} | Std {{ cell.standard }} | Sec {{ cell.section }}</div>
+                                                <div class="cell-meta">{{ cell.room }}</div>
+                                            {% else %}
+                                                <div class="empty-cell">Free Slot</div>
+                                            {% endif %}
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        {% endfor %}
+
+        <section class="card-surface p-3 p-md-4 mt-4">
+            <div class="section-header d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                <h2 class="mini-title mb-0">Room-Wise Timetables</h2>
+                <span class="section-meta">{{ summary.room_count }} rooms</span>
+            </div>
+            <p class="helper-note mb-0">
+                Track classroom and lab utilization to support infrastructure planning and conflict monitoring.
+            </p>
+        </section>
+
+        {% for table in room_tables %}
+            {% set room_stats = summary.room_stats.get(table.room) %}
+            <section class="card-surface p-3 p-md-4 mt-4" data-result-card data-result-kind="room" data-result-search="{{ table.room }}">
+                <div class="section-header d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                    <h2 class="mini-title mb-0">Room: {{ table.room }}</h2>
+                    {% if room_stats %}
+                        <span class="section-meta">
+                            {{ room_stats.scheduled_slots }}/{{ room_stats.total_slots }} teaching slots
+                            ({{ room_stats.utilization_percent }}%)
+                        </span>
+                    {% endif %}
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table timetable-table align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="day-col">Day</th>
+                                {% for period in periods %}
+                                    <th scope="col">{{ period }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for day_name in days %}
+                                {% set day_index = loop.index0 %}
+                                <tr>
+                                    <th scope="row">{{ day_name }}</th>
+                                    {% for cell in table.timetable[day_index] %}
+                                        {% set period_number = loop.index %}
+                                        <td
+                                            class="{% if cell and ('conflicts' not in cell) and period_number not in lunch_break_periods_by_day.get(day_index, []) %}manual-slot-cell{% endif %}{% if cell and ('conflicts' not in cell) and cell.is_locked %} manual-slot-locked{% endif %}"
+                                            data-slot-editable="{% if period_number in lunch_break_periods_by_day.get(day_index, []) %}0{% elif cell and ('conflicts' in cell) %}0{% elif cell %}1{% else %}0{% endif %}"
+                                            data-section-key="{{ cell.section_key if cell and ('conflicts' not in cell) else '' }}"
+                                            data-day-index="{{ day_index + 1 }}"
+                                            data-period-index="{{ period_number }}"
+                                            data-subject="{{ cell.subject if cell and ('conflicts' not in cell) else '' }}"
+                                            data-teacher="{{ cell.teacher if cell and ('conflicts' not in cell) else '' }}"
+                                            data-room="{{ table.room if cell and ('conflicts' not in cell) else '' }}"
+                                            data-is-lab="{% if cell and ('conflicts' not in cell) and cell.is_lab %}1{% else %}0{% endif %}"
+                                            data-is-locked="{% if cell and ('conflicts' not in cell) and cell.is_locked %}1{% else %}0{% endif %}"
+                                            data-is-empty="{% if cell and ('conflicts' not in cell) %}0{% else %}1{% endif %}"
+                                        >
+                                            {% if period_number in lunch_break_periods_by_day.get(day_index, []) %}
+                                                <div class="lunch-cell">Lunch Break</div>
+                                            {% elif cell and ('conflicts' in cell) %}
+                                                <div class="cell-subject text-danger">Conflict</div>
+                                                <div class="cell-meta">Multiple classes in same room</div>
+                                            {% elif cell %}
+                                                <div class="cell-subject">
+                                                    {{ cell.subject }}
+                                                    {% if cell.is_lab %}
+                                                        <span class="lab-badge">LAB</span>
+                                                    {% endif %}
+                                                    {% if cell.is_locked %}
+                                                        <span class="lock-badge">LOCKED</span>
+                                                    {% endif %}
+                                                </div>
+                                                {% if cell.is_lab and cell.session_length and cell.session_length > 1 %}
+                                                    <div class="tiny-note">Block {{ cell.session_part }}/{{ cell.session_length }}</div>
+                                                {% endif %}
+                                                <div class="cell-meta">{{ cell.class_name }} | Std {{ cell.standard }} | Sec {{ cell.section }}</div>
+                                                <div class="cell-meta">{{ cell.teacher }}</div>
+                                            {% else %}
+                                                <div class="empty-cell">Free Slot</div>
+                                            {% endif %}
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        {% endfor %}
+
+        {% for table in section_tables %}
+            {% set section_stats = summary.section_stats.get(table.section_key) %}
+            <section class="card-surface p-3 p-md-4 mt-4" data-result-card data-result-kind="section" data-result-search="{{ table.class_name }} {{ table.standard }} {{ table.section }} {{ table.section_key }}">
+                <div class="section-header d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                    <h2 class="mini-title mb-0">
+                        {{ table.class_name }} | Standard {{ table.standard }} | Section {{ table.section }}
+                    </h2>
+                    {% if section_stats %}
+                        <span class="section-meta">
+                            {{ section_stats.scheduled_slots }}/{{ section_stats.total_slots }} teaching slots
+                            ({{ section_stats.utilization_percent }}%)
+                        </span>
+                    {% endif %}
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table timetable-table align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="day-col">Day</th>
+                                {% for period in periods %}
+                                    <th scope="col">{{ period }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for day_name in days %}
+                                {% set day_index = loop.index0 %}
+                                <tr>
+                                    <th scope="row">{{ day_name }}</th>
+                                    {% for cell in table.timetable[day_index] %}
+                                        {% set period_number = loop.index %}
+                                        <td
+                                            class="{% if period_number not in lunch_break_periods_by_day.get(day_index, []) %}manual-slot-cell{% endif %}{% if cell and cell.is_locked %} manual-slot-locked{% endif %}"
+                                            data-slot-editable="{% if period_number in lunch_break_periods_by_day.get(day_index, []) %}0{% else %}1{% endif %}"
+                                            data-section-key="{{ table.section_key }}"
+                                            data-day-index="{{ day_index + 1 }}"
+                                            data-period-index="{{ period_number }}"
+                                            data-subject="{{ cell.subject if cell else '' }}"
+                                            data-teacher="{{ cell.teacher if cell else '' }}"
+                                            data-room="{{ cell.room if cell else '' }}"
+                                            data-is-lab="{% if cell and cell.is_lab %}1{% else %}0{% endif %}"
+                                            data-is-locked="{% if cell and cell.is_locked %}1{% else %}0{% endif %}"
+                                            data-is-empty="{% if cell %}0{% else %}1{% endif %}"
+                                        >
+                                            {% if period_number in lunch_break_periods_by_day.get(day_index, []) %}
+                                                <div class="lunch-cell">Lunch Break</div>
+                                            {% elif cell %}
+                                                <div class="cell-subject">
+                                                    {{ cell.subject }}
+                                                    {% if cell.is_lab %}
+                                                        <span class="lab-badge">LAB</span>
+                                                    {% endif %}
+                                                    {% if cell.is_locked %}
+                                                        <span class="lock-badge">LOCKED</span>
+                                                    {% endif %}
+                                                </div>
+                                                {% if cell.is_lab and cell.session_length and cell.session_length > 1 %}
+                                                    <div class="tiny-note">Block {{ cell.session_part }}/{{ cell.session_length }}</div>
+                                                {% endif %}
+                                                <div class="cell-meta">{{ cell.teacher }}</div>
+                                                <div class="cell-meta">{{ cell.room }}</div>
+                                            {% else %}
+                                                <div class="empty-cell">Free Slot</div>
+                                            {% endif %}
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        {% endfor %}
+    </main>
+
+    <script id="export-options-json" type="application/json">{{ export_options | tojson }}</script>
+    <script src="{{ url_for('static', filename='result.js') }}"></script>
+</body>
+</html>

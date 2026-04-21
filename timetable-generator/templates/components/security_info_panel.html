@@ -1,0 +1,64 @@
+<!-- Security Configuration Information Panel -->
+<!-- Include this in admin pages with: {% include 'components/security_info_panel.html' %} -->
+
+<section class="card-surface p-3 p-md-4 mt-4" style="border-left: 4px solid var(--brand-500);">
+    <h3 class="mini-title mb-3" style="color: var(--brand-500);">🔒 Security Configuration</h3>
+    
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div style="padding: 1rem; background: var(--surface-muted); border-radius: 6px;">
+                <h5 style="font-weight: 700; color: var(--ink-900); margin-bottom: 0.75rem;">Password Policy</h5>
+                <ul style="margin: 0; padding-left: 1.5rem; font-size: 0.9rem; line-height: 1.6;">
+                    <li><strong>Minimum Length:</strong> 10 characters</li>
+                    <li><strong>Allowed Characters:</strong> All printable ASCII</li>
+                    <li><strong>Format Rules:</strong> No leading/trailing spaces</li>
+                    <li><strong>Reuse:</strong> Cannot reuse current password (change-password only)</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div style="padding: 1rem; background: var(--surface-muted); border-radius: 6px;">
+                <h5 style="font-weight: 700; color: var(--ink-900); margin-bottom: 0.75rem;">Login Protection</h5>
+                <ul style="margin: 0; padding-left: 1.5rem; font-size: 0.9rem; line-height: 1.6;">
+                    <li><strong>Rate Limiting:</strong> 5 failed attempts per 15 min window</li>
+                    <li><strong>Lockout Duration:</strong> 10 minutes after threshold</li>
+                    <li><strong>Tracking:</strong> By IP address and username (scoped)</li>
+                    <li><strong>Recovery:</strong> Contact administrator if locked out</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mt-2">
+        <div class="col-md-6">
+            <div style="padding: 1rem; background: var(--surface-muted); border-radius: 6px;">
+                <h5 style="font-weight: 700; color: var(--ink-900); margin-bottom: 0.75rem;">Session Security</h5>
+                <ul style="margin: 0; padding-left: 1.5rem; font-size: 0.9rem; line-height: 1.6;">
+                    <li><strong>Cookies:</strong> HttpOnly, Secure, SameSite=Lax</li>
+                    <li><strong>CSRF Protection:</strong> Same-origin enforcement</li>
+                    <li><strong>Timeout:</strong> Browser session lifetime (or configured limit)</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div style="padding: 1rem; background: var(--surface-muted); border-radius: 6px;">
+                <h5 style="font-weight: 700; color: var(--ink-900); margin-bottom: 0.75rem;">Request Validation</h5>
+                <ul style="margin: 0; padding-left: 1.5rem; font-size: 0.9rem; line-height: 1.6;">
+                    <li><strong>Origin Checks:</strong> Cross-origin POST/PUT/PATCH/DELETE blocked</li>
+                    <li><strong>Headers:</strong> X-Content-Type-Options, X-Frame-Options set</li>
+                    <li><strong>Referrer Policy:</strong> Strict-origin-when-cross-origin</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(255, 248, 240, 0.8); border-left: 3px solid var(--accent-500); border-radius: 4px;">
+        <p style="margin: 0; font-size: 0.9rem; color: var(--ink-700);">
+            <strong>ℹ Environment Variables:</strong> All thresholds can be customized via environment variables with 
+            <code>TIMETABLE_</code> prefix (e.g., <code>TIMETABLE_MIN_PASSWORD_LENGTH</code>, 
+            <code>TIMETABLE_LOGIN_MAX_FAILURES</code>). See README for complete list.
+        </p>
+    </div>
+</section>

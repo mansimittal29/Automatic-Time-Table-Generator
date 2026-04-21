@@ -1,0 +1,649 @@
+class_name,standard,section,subject,teacher,lectures,type,allowed_rooms,daily_max
+Class-01,Year-1,A,Mathematics,Faculty-001,4,THEORY,,2
+Class-01,Year-1,A,Programming Fundamentals,Faculty-002,4,THEORY,,2
+Class-01,Year-1,A,Data Structures,Faculty-003,4,THEORY,,2
+Class-01,Year-1,A,Database Systems,Faculty-004,4,THEORY,,2
+Class-01,Year-1,A,Communication Skills,Faculty-005,4,THEORY,,2
+Class-01,Year-1,A,Operating Systems,Faculty-006,4,THEORY,,2
+Class-01,Year-1,A,Programming Lab,Faculty-007,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-01,Year-1,A,Database Lab,Faculty-008,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-01,Year-1,A,Networks Lab,Faculty-009,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-01,Year-1,B,Mathematics,Faculty-010,4,THEORY,,2
+Class-01,Year-1,B,Programming Fundamentals,Faculty-011,4,THEORY,,2
+Class-01,Year-1,B,Data Structures,Faculty-012,4,THEORY,,2
+Class-01,Year-1,B,Database Systems,Faculty-013,4,THEORY,,2
+Class-01,Year-1,B,Communication Skills,Faculty-014,4,THEORY,,2
+Class-01,Year-1,B,Operating Systems,Faculty-015,4,THEORY,,2
+Class-01,Year-1,B,Programming Lab,Faculty-016,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-01,Year-1,B,Database Lab,Faculty-017,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-01,Year-1,B,Networks Lab,Faculty-018,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-01,Year-1,C,Mathematics,Faculty-019,4,THEORY,,2
+Class-01,Year-1,C,Programming Fundamentals,Faculty-020,4,THEORY,,2
+Class-01,Year-1,C,Data Structures,Faculty-021,4,THEORY,,2
+Class-01,Year-1,C,Database Systems,Faculty-022,4,THEORY,,2
+Class-01,Year-1,C,Communication Skills,Faculty-023,4,THEORY,,2
+Class-01,Year-1,C,Operating Systems,Faculty-024,4,THEORY,,2
+Class-01,Year-1,C,Programming Lab,Faculty-025,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-01,Year-1,C,Database Lab,Faculty-026,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-01,Year-1,C,Networks Lab,Faculty-027,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-02,Year-2,A,Mathematics,Faculty-028,4,THEORY,,2
+Class-02,Year-2,A,Programming Fundamentals,Faculty-029,4,THEORY,,2
+Class-02,Year-2,A,Data Structures,Faculty-030,4,THEORY,,2
+Class-02,Year-2,A,Database Systems,Faculty-031,4,THEORY,,2
+Class-02,Year-2,A,Communication Skills,Faculty-032,4,THEORY,,2
+Class-02,Year-2,A,Operating Systems,Faculty-033,4,THEORY,,2
+Class-02,Year-2,A,Programming Lab,Faculty-034,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-02,Year-2,A,Database Lab,Faculty-035,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-02,Year-2,A,Networks Lab,Faculty-036,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-02,Year-2,B,Mathematics,Faculty-037,4,THEORY,,2
+Class-02,Year-2,B,Programming Fundamentals,Faculty-038,4,THEORY,,2
+Class-02,Year-2,B,Data Structures,Faculty-039,4,THEORY,,2
+Class-02,Year-2,B,Database Systems,Faculty-040,4,THEORY,,2
+Class-02,Year-2,B,Communication Skills,Faculty-041,4,THEORY,,2
+Class-02,Year-2,B,Operating Systems,Faculty-042,4,THEORY,,2
+Class-02,Year-2,B,Programming Lab,Faculty-043,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-02,Year-2,B,Database Lab,Faculty-044,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-02,Year-2,B,Networks Lab,Faculty-045,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-02,Year-2,C,Mathematics,Faculty-046,4,THEORY,,2
+Class-02,Year-2,C,Programming Fundamentals,Faculty-047,4,THEORY,,2
+Class-02,Year-2,C,Data Structures,Faculty-048,4,THEORY,,2
+Class-02,Year-2,C,Database Systems,Faculty-049,4,THEORY,,2
+Class-02,Year-2,C,Communication Skills,Faculty-050,4,THEORY,,2
+Class-02,Year-2,C,Operating Systems,Faculty-051,4,THEORY,,2
+Class-02,Year-2,C,Programming Lab,Faculty-052,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-02,Year-2,C,Database Lab,Faculty-053,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-02,Year-2,C,Networks Lab,Faculty-054,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-03,Year-3,A,Mathematics,Faculty-055,4,THEORY,,2
+Class-03,Year-3,A,Programming Fundamentals,Faculty-056,4,THEORY,,2
+Class-03,Year-3,A,Data Structures,Faculty-057,4,THEORY,,2
+Class-03,Year-3,A,Database Systems,Faculty-058,4,THEORY,,2
+Class-03,Year-3,A,Communication Skills,Faculty-059,4,THEORY,,2
+Class-03,Year-3,A,Operating Systems,Faculty-060,4,THEORY,,2
+Class-03,Year-3,A,Programming Lab,Faculty-061,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-03,Year-3,A,Database Lab,Faculty-062,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-03,Year-3,A,Networks Lab,Faculty-063,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-03,Year-3,B,Mathematics,Faculty-064,4,THEORY,,2
+Class-03,Year-3,B,Programming Fundamentals,Faculty-065,4,THEORY,,2
+Class-03,Year-3,B,Data Structures,Faculty-066,4,THEORY,,2
+Class-03,Year-3,B,Database Systems,Faculty-067,4,THEORY,,2
+Class-03,Year-3,B,Communication Skills,Faculty-068,4,THEORY,,2
+Class-03,Year-3,B,Operating Systems,Faculty-069,4,THEORY,,2
+Class-03,Year-3,B,Programming Lab,Faculty-070,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-03,Year-3,B,Database Lab,Faculty-071,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-03,Year-3,B,Networks Lab,Faculty-072,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-03,Year-3,C,Mathematics,Faculty-073,4,THEORY,,2
+Class-03,Year-3,C,Programming Fundamentals,Faculty-074,4,THEORY,,2
+Class-03,Year-3,C,Data Structures,Faculty-075,4,THEORY,,2
+Class-03,Year-3,C,Database Systems,Faculty-076,4,THEORY,,2
+Class-03,Year-3,C,Communication Skills,Faculty-077,4,THEORY,,2
+Class-03,Year-3,C,Operating Systems,Faculty-078,4,THEORY,,2
+Class-03,Year-3,C,Programming Lab,Faculty-079,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-03,Year-3,C,Database Lab,Faculty-080,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-03,Year-3,C,Networks Lab,Faculty-081,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-04,Year-4,A,Mathematics,Faculty-082,4,THEORY,,2
+Class-04,Year-4,A,Programming Fundamentals,Faculty-083,4,THEORY,,2
+Class-04,Year-4,A,Data Structures,Faculty-084,4,THEORY,,2
+Class-04,Year-4,A,Database Systems,Faculty-085,4,THEORY,,2
+Class-04,Year-4,A,Communication Skills,Faculty-086,4,THEORY,,2
+Class-04,Year-4,A,Operating Systems,Faculty-087,4,THEORY,,2
+Class-04,Year-4,A,Programming Lab,Faculty-088,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-04,Year-4,A,Database Lab,Faculty-089,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-04,Year-4,A,Networks Lab,Faculty-090,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-04,Year-4,B,Mathematics,Faculty-091,4,THEORY,,2
+Class-04,Year-4,B,Programming Fundamentals,Faculty-092,4,THEORY,,2
+Class-04,Year-4,B,Data Structures,Faculty-093,4,THEORY,,2
+Class-04,Year-4,B,Database Systems,Faculty-094,4,THEORY,,2
+Class-04,Year-4,B,Communication Skills,Faculty-095,4,THEORY,,2
+Class-04,Year-4,B,Operating Systems,Faculty-096,4,THEORY,,2
+Class-04,Year-4,B,Programming Lab,Faculty-097,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-04,Year-4,B,Database Lab,Faculty-098,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-04,Year-4,B,Networks Lab,Faculty-099,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-04,Year-4,C,Mathematics,Faculty-100,4,THEORY,,2
+Class-04,Year-4,C,Programming Fundamentals,Faculty-101,4,THEORY,,2
+Class-04,Year-4,C,Data Structures,Faculty-102,4,THEORY,,2
+Class-04,Year-4,C,Database Systems,Faculty-103,4,THEORY,,2
+Class-04,Year-4,C,Communication Skills,Faculty-104,4,THEORY,,2
+Class-04,Year-4,C,Operating Systems,Faculty-105,4,THEORY,,2
+Class-04,Year-4,C,Programming Lab,Faculty-106,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-04,Year-4,C,Database Lab,Faculty-107,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-04,Year-4,C,Networks Lab,Faculty-108,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-05,Year-1,A,Mathematics,Faculty-109,4,THEORY,,2
+Class-05,Year-1,A,Programming Fundamentals,Faculty-110,4,THEORY,,2
+Class-05,Year-1,A,Data Structures,Faculty-111,4,THEORY,,2
+Class-05,Year-1,A,Database Systems,Faculty-112,4,THEORY,,2
+Class-05,Year-1,A,Communication Skills,Faculty-113,4,THEORY,,2
+Class-05,Year-1,A,Operating Systems,Faculty-114,4,THEORY,,2
+Class-05,Year-1,A,Programming Lab,Faculty-115,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-05,Year-1,A,Database Lab,Faculty-116,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-05,Year-1,A,Networks Lab,Faculty-117,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-05,Year-1,B,Mathematics,Faculty-118,4,THEORY,,2
+Class-05,Year-1,B,Programming Fundamentals,Faculty-119,4,THEORY,,2
+Class-05,Year-1,B,Data Structures,Faculty-120,4,THEORY,,2
+Class-05,Year-1,B,Database Systems,Faculty-121,4,THEORY,,2
+Class-05,Year-1,B,Communication Skills,Faculty-122,4,THEORY,,2
+Class-05,Year-1,B,Operating Systems,Faculty-123,4,THEORY,,2
+Class-05,Year-1,B,Programming Lab,Faculty-124,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-05,Year-1,B,Database Lab,Faculty-125,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-05,Year-1,B,Networks Lab,Faculty-126,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-05,Year-1,C,Mathematics,Faculty-127,4,THEORY,,2
+Class-05,Year-1,C,Programming Fundamentals,Faculty-128,4,THEORY,,2
+Class-05,Year-1,C,Data Structures,Faculty-129,4,THEORY,,2
+Class-05,Year-1,C,Database Systems,Faculty-130,4,THEORY,,2
+Class-05,Year-1,C,Communication Skills,Faculty-131,4,THEORY,,2
+Class-05,Year-1,C,Operating Systems,Faculty-132,4,THEORY,,2
+Class-05,Year-1,C,Programming Lab,Faculty-133,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-05,Year-1,C,Database Lab,Faculty-134,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-05,Year-1,C,Networks Lab,Faculty-135,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-06,Year-2,A,Mathematics,Faculty-136,4,THEORY,,2
+Class-06,Year-2,A,Programming Fundamentals,Faculty-137,4,THEORY,,2
+Class-06,Year-2,A,Data Structures,Faculty-138,4,THEORY,,2
+Class-06,Year-2,A,Database Systems,Faculty-139,4,THEORY,,2
+Class-06,Year-2,A,Communication Skills,Faculty-140,4,THEORY,,2
+Class-06,Year-2,A,Operating Systems,Faculty-141,4,THEORY,,2
+Class-06,Year-2,A,Programming Lab,Faculty-142,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-06,Year-2,A,Database Lab,Faculty-143,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-06,Year-2,A,Networks Lab,Faculty-144,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-06,Year-2,B,Mathematics,Faculty-145,4,THEORY,,2
+Class-06,Year-2,B,Programming Fundamentals,Faculty-146,4,THEORY,,2
+Class-06,Year-2,B,Data Structures,Faculty-147,4,THEORY,,2
+Class-06,Year-2,B,Database Systems,Faculty-148,4,THEORY,,2
+Class-06,Year-2,B,Communication Skills,Faculty-149,4,THEORY,,2
+Class-06,Year-2,B,Operating Systems,Faculty-150,4,THEORY,,2
+Class-06,Year-2,B,Programming Lab,Faculty-151,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-06,Year-2,B,Database Lab,Faculty-152,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-06,Year-2,B,Networks Lab,Faculty-153,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-06,Year-2,C,Mathematics,Faculty-154,4,THEORY,,2
+Class-06,Year-2,C,Programming Fundamentals,Faculty-155,4,THEORY,,2
+Class-06,Year-2,C,Data Structures,Faculty-156,4,THEORY,,2
+Class-06,Year-2,C,Database Systems,Faculty-157,4,THEORY,,2
+Class-06,Year-2,C,Communication Skills,Faculty-158,4,THEORY,,2
+Class-06,Year-2,C,Operating Systems,Faculty-159,4,THEORY,,2
+Class-06,Year-2,C,Programming Lab,Faculty-160,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-06,Year-2,C,Database Lab,Faculty-161,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-06,Year-2,C,Networks Lab,Faculty-162,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-07,Year-3,A,Mathematics,Faculty-163,4,THEORY,,2
+Class-07,Year-3,A,Programming Fundamentals,Faculty-164,4,THEORY,,2
+Class-07,Year-3,A,Data Structures,Faculty-165,4,THEORY,,2
+Class-07,Year-3,A,Database Systems,Faculty-166,4,THEORY,,2
+Class-07,Year-3,A,Communication Skills,Faculty-167,4,THEORY,,2
+Class-07,Year-3,A,Operating Systems,Faculty-168,4,THEORY,,2
+Class-07,Year-3,A,Programming Lab,Faculty-169,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-07,Year-3,A,Database Lab,Faculty-170,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-07,Year-3,A,Networks Lab,Faculty-171,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-07,Year-3,B,Mathematics,Faculty-172,4,THEORY,,2
+Class-07,Year-3,B,Programming Fundamentals,Faculty-173,4,THEORY,,2
+Class-07,Year-3,B,Data Structures,Faculty-174,4,THEORY,,2
+Class-07,Year-3,B,Database Systems,Faculty-175,4,THEORY,,2
+Class-07,Year-3,B,Communication Skills,Faculty-176,4,THEORY,,2
+Class-07,Year-3,B,Operating Systems,Faculty-177,4,THEORY,,2
+Class-07,Year-3,B,Programming Lab,Faculty-178,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-07,Year-3,B,Database Lab,Faculty-179,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-07,Year-3,B,Networks Lab,Faculty-180,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-07,Year-3,C,Mathematics,Faculty-181,4,THEORY,,2
+Class-07,Year-3,C,Programming Fundamentals,Faculty-182,4,THEORY,,2
+Class-07,Year-3,C,Data Structures,Faculty-183,4,THEORY,,2
+Class-07,Year-3,C,Database Systems,Faculty-184,4,THEORY,,2
+Class-07,Year-3,C,Communication Skills,Faculty-185,4,THEORY,,2
+Class-07,Year-3,C,Operating Systems,Faculty-186,4,THEORY,,2
+Class-07,Year-3,C,Programming Lab,Faculty-187,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-07,Year-3,C,Database Lab,Faculty-188,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-07,Year-3,C,Networks Lab,Faculty-189,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-08,Year-4,A,Mathematics,Faculty-190,4,THEORY,,2
+Class-08,Year-4,A,Programming Fundamentals,Faculty-191,4,THEORY,,2
+Class-08,Year-4,A,Data Structures,Faculty-192,4,THEORY,,2
+Class-08,Year-4,A,Database Systems,Faculty-193,4,THEORY,,2
+Class-08,Year-4,A,Communication Skills,Faculty-194,4,THEORY,,2
+Class-08,Year-4,A,Operating Systems,Faculty-195,4,THEORY,,2
+Class-08,Year-4,A,Programming Lab,Faculty-196,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-08,Year-4,A,Database Lab,Faculty-197,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-08,Year-4,A,Networks Lab,Faculty-198,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-08,Year-4,B,Mathematics,Faculty-199,4,THEORY,,2
+Class-08,Year-4,B,Programming Fundamentals,Faculty-200,4,THEORY,,2
+Class-08,Year-4,B,Data Structures,Faculty-201,4,THEORY,,2
+Class-08,Year-4,B,Database Systems,Faculty-202,4,THEORY,,2
+Class-08,Year-4,B,Communication Skills,Faculty-203,4,THEORY,,2
+Class-08,Year-4,B,Operating Systems,Faculty-204,4,THEORY,,2
+Class-08,Year-4,B,Programming Lab,Faculty-205,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-08,Year-4,B,Database Lab,Faculty-206,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-08,Year-4,B,Networks Lab,Faculty-207,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-08,Year-4,C,Mathematics,Faculty-208,4,THEORY,,2
+Class-08,Year-4,C,Programming Fundamentals,Faculty-209,4,THEORY,,2
+Class-08,Year-4,C,Data Structures,Faculty-210,4,THEORY,,2
+Class-08,Year-4,C,Database Systems,Faculty-211,4,THEORY,,2
+Class-08,Year-4,C,Communication Skills,Faculty-212,4,THEORY,,2
+Class-08,Year-4,C,Operating Systems,Faculty-213,4,THEORY,,2
+Class-08,Year-4,C,Programming Lab,Faculty-214,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-08,Year-4,C,Database Lab,Faculty-215,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-08,Year-4,C,Networks Lab,Faculty-216,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-09,Year-1,A,Mathematics,Faculty-217,4,THEORY,,2
+Class-09,Year-1,A,Programming Fundamentals,Faculty-218,4,THEORY,,2
+Class-09,Year-1,A,Data Structures,Faculty-219,4,THEORY,,2
+Class-09,Year-1,A,Database Systems,Faculty-220,4,THEORY,,2
+Class-09,Year-1,A,Communication Skills,Faculty-221,4,THEORY,,2
+Class-09,Year-1,A,Operating Systems,Faculty-222,4,THEORY,,2
+Class-09,Year-1,A,Programming Lab,Faculty-223,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-09,Year-1,A,Database Lab,Faculty-224,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-09,Year-1,A,Networks Lab,Faculty-225,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-09,Year-1,B,Mathematics,Faculty-226,4,THEORY,,2
+Class-09,Year-1,B,Programming Fundamentals,Faculty-227,4,THEORY,,2
+Class-09,Year-1,B,Data Structures,Faculty-228,4,THEORY,,2
+Class-09,Year-1,B,Database Systems,Faculty-229,4,THEORY,,2
+Class-09,Year-1,B,Communication Skills,Faculty-230,4,THEORY,,2
+Class-09,Year-1,B,Operating Systems,Faculty-231,4,THEORY,,2
+Class-09,Year-1,B,Programming Lab,Faculty-232,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-09,Year-1,B,Database Lab,Faculty-233,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-09,Year-1,B,Networks Lab,Faculty-234,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-09,Year-1,C,Mathematics,Faculty-235,4,THEORY,,2
+Class-09,Year-1,C,Programming Fundamentals,Faculty-236,4,THEORY,,2
+Class-09,Year-1,C,Data Structures,Faculty-237,4,THEORY,,2
+Class-09,Year-1,C,Database Systems,Faculty-238,4,THEORY,,2
+Class-09,Year-1,C,Communication Skills,Faculty-239,4,THEORY,,2
+Class-09,Year-1,C,Operating Systems,Faculty-240,4,THEORY,,2
+Class-09,Year-1,C,Programming Lab,Faculty-241,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-09,Year-1,C,Database Lab,Faculty-242,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-09,Year-1,C,Networks Lab,Faculty-243,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-10,Year-2,A,Mathematics,Faculty-244,4,THEORY,,2
+Class-10,Year-2,A,Programming Fundamentals,Faculty-245,4,THEORY,,2
+Class-10,Year-2,A,Data Structures,Faculty-246,4,THEORY,,2
+Class-10,Year-2,A,Database Systems,Faculty-247,4,THEORY,,2
+Class-10,Year-2,A,Communication Skills,Faculty-248,4,THEORY,,2
+Class-10,Year-2,A,Operating Systems,Faculty-249,4,THEORY,,2
+Class-10,Year-2,A,Programming Lab,Faculty-250,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-10,Year-2,A,Database Lab,Faculty-251,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-10,Year-2,A,Networks Lab,Faculty-252,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-10,Year-2,B,Mathematics,Faculty-253,4,THEORY,,2
+Class-10,Year-2,B,Programming Fundamentals,Faculty-254,4,THEORY,,2
+Class-10,Year-2,B,Data Structures,Faculty-255,4,THEORY,,2
+Class-10,Year-2,B,Database Systems,Faculty-256,4,THEORY,,2
+Class-10,Year-2,B,Communication Skills,Faculty-257,4,THEORY,,2
+Class-10,Year-2,B,Operating Systems,Faculty-258,4,THEORY,,2
+Class-10,Year-2,B,Programming Lab,Faculty-259,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-10,Year-2,B,Database Lab,Faculty-260,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-10,Year-2,B,Networks Lab,Faculty-261,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-10,Year-2,C,Mathematics,Faculty-262,4,THEORY,,2
+Class-10,Year-2,C,Programming Fundamentals,Faculty-263,4,THEORY,,2
+Class-10,Year-2,C,Data Structures,Faculty-264,4,THEORY,,2
+Class-10,Year-2,C,Database Systems,Faculty-265,4,THEORY,,2
+Class-10,Year-2,C,Communication Skills,Faculty-266,4,THEORY,,2
+Class-10,Year-2,C,Operating Systems,Faculty-267,4,THEORY,,2
+Class-10,Year-2,C,Programming Lab,Faculty-268,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-10,Year-2,C,Database Lab,Faculty-269,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-10,Year-2,C,Networks Lab,Faculty-270,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-11,Year-3,A,Mathematics,Faculty-271,4,THEORY,,2
+Class-11,Year-3,A,Programming Fundamentals,Faculty-272,4,THEORY,,2
+Class-11,Year-3,A,Data Structures,Faculty-273,4,THEORY,,2
+Class-11,Year-3,A,Database Systems,Faculty-274,4,THEORY,,2
+Class-11,Year-3,A,Communication Skills,Faculty-275,4,THEORY,,2
+Class-11,Year-3,A,Operating Systems,Faculty-276,4,THEORY,,2
+Class-11,Year-3,A,Programming Lab,Faculty-277,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-11,Year-3,A,Database Lab,Faculty-278,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-11,Year-3,A,Networks Lab,Faculty-279,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-11,Year-3,B,Mathematics,Faculty-280,4,THEORY,,2
+Class-11,Year-3,B,Programming Fundamentals,Faculty-281,4,THEORY,,2
+Class-11,Year-3,B,Data Structures,Faculty-282,4,THEORY,,2
+Class-11,Year-3,B,Database Systems,Faculty-283,4,THEORY,,2
+Class-11,Year-3,B,Communication Skills,Faculty-284,4,THEORY,,2
+Class-11,Year-3,B,Operating Systems,Faculty-285,4,THEORY,,2
+Class-11,Year-3,B,Programming Lab,Faculty-286,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-11,Year-3,B,Database Lab,Faculty-287,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-11,Year-3,B,Networks Lab,Faculty-288,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-11,Year-3,C,Mathematics,Faculty-289,4,THEORY,,2
+Class-11,Year-3,C,Programming Fundamentals,Faculty-290,4,THEORY,,2
+Class-11,Year-3,C,Data Structures,Faculty-291,4,THEORY,,2
+Class-11,Year-3,C,Database Systems,Faculty-292,4,THEORY,,2
+Class-11,Year-3,C,Communication Skills,Faculty-293,4,THEORY,,2
+Class-11,Year-3,C,Operating Systems,Faculty-294,4,THEORY,,2
+Class-11,Year-3,C,Programming Lab,Faculty-295,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-11,Year-3,C,Database Lab,Faculty-296,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-11,Year-3,C,Networks Lab,Faculty-297,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-12,Year-4,A,Mathematics,Faculty-298,4,THEORY,,2
+Class-12,Year-4,A,Programming Fundamentals,Faculty-299,4,THEORY,,2
+Class-12,Year-4,A,Data Structures,Faculty-300,4,THEORY,,2
+Class-12,Year-4,A,Database Systems,Faculty-301,4,THEORY,,2
+Class-12,Year-4,A,Communication Skills,Faculty-302,4,THEORY,,2
+Class-12,Year-4,A,Operating Systems,Faculty-303,4,THEORY,,2
+Class-12,Year-4,A,Programming Lab,Faculty-304,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-12,Year-4,A,Database Lab,Faculty-305,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-12,Year-4,A,Networks Lab,Faculty-306,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-12,Year-4,B,Mathematics,Faculty-307,4,THEORY,,2
+Class-12,Year-4,B,Programming Fundamentals,Faculty-308,4,THEORY,,2
+Class-12,Year-4,B,Data Structures,Faculty-309,4,THEORY,,2
+Class-12,Year-4,B,Database Systems,Faculty-310,4,THEORY,,2
+Class-12,Year-4,B,Communication Skills,Faculty-311,4,THEORY,,2
+Class-12,Year-4,B,Operating Systems,Faculty-312,4,THEORY,,2
+Class-12,Year-4,B,Programming Lab,Faculty-313,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-12,Year-4,B,Database Lab,Faculty-314,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-12,Year-4,B,Networks Lab,Faculty-315,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-12,Year-4,C,Mathematics,Faculty-316,4,THEORY,,2
+Class-12,Year-4,C,Programming Fundamentals,Faculty-317,4,THEORY,,2
+Class-12,Year-4,C,Data Structures,Faculty-318,4,THEORY,,2
+Class-12,Year-4,C,Database Systems,Faculty-319,4,THEORY,,2
+Class-12,Year-4,C,Communication Skills,Faculty-320,4,THEORY,,2
+Class-12,Year-4,C,Operating Systems,Faculty-321,4,THEORY,,2
+Class-12,Year-4,C,Programming Lab,Faculty-322,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-12,Year-4,C,Database Lab,Faculty-323,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-12,Year-4,C,Networks Lab,Faculty-324,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-13,Year-1,A,Mathematics,Faculty-325,4,THEORY,,2
+Class-13,Year-1,A,Programming Fundamentals,Faculty-326,4,THEORY,,2
+Class-13,Year-1,A,Data Structures,Faculty-327,4,THEORY,,2
+Class-13,Year-1,A,Database Systems,Faculty-328,4,THEORY,,2
+Class-13,Year-1,A,Communication Skills,Faculty-329,4,THEORY,,2
+Class-13,Year-1,A,Operating Systems,Faculty-330,4,THEORY,,2
+Class-13,Year-1,A,Programming Lab,Faculty-331,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-13,Year-1,A,Database Lab,Faculty-332,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-13,Year-1,A,Networks Lab,Faculty-333,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-13,Year-1,B,Mathematics,Faculty-334,4,THEORY,,2
+Class-13,Year-1,B,Programming Fundamentals,Faculty-335,4,THEORY,,2
+Class-13,Year-1,B,Data Structures,Faculty-336,4,THEORY,,2
+Class-13,Year-1,B,Database Systems,Faculty-337,4,THEORY,,2
+Class-13,Year-1,B,Communication Skills,Faculty-338,4,THEORY,,2
+Class-13,Year-1,B,Operating Systems,Faculty-339,4,THEORY,,2
+Class-13,Year-1,B,Programming Lab,Faculty-340,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-13,Year-1,B,Database Lab,Faculty-341,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-13,Year-1,B,Networks Lab,Faculty-342,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-13,Year-1,C,Mathematics,Faculty-343,4,THEORY,,2
+Class-13,Year-1,C,Programming Fundamentals,Faculty-344,4,THEORY,,2
+Class-13,Year-1,C,Data Structures,Faculty-345,4,THEORY,,2
+Class-13,Year-1,C,Database Systems,Faculty-346,4,THEORY,,2
+Class-13,Year-1,C,Communication Skills,Faculty-347,4,THEORY,,2
+Class-13,Year-1,C,Operating Systems,Faculty-348,4,THEORY,,2
+Class-13,Year-1,C,Programming Lab,Faculty-349,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-13,Year-1,C,Database Lab,Faculty-350,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-13,Year-1,C,Networks Lab,Faculty-351,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-14,Year-2,A,Mathematics,Faculty-352,4,THEORY,,2
+Class-14,Year-2,A,Programming Fundamentals,Faculty-353,4,THEORY,,2
+Class-14,Year-2,A,Data Structures,Faculty-354,4,THEORY,,2
+Class-14,Year-2,A,Database Systems,Faculty-355,4,THEORY,,2
+Class-14,Year-2,A,Communication Skills,Faculty-356,4,THEORY,,2
+Class-14,Year-2,A,Operating Systems,Faculty-357,4,THEORY,,2
+Class-14,Year-2,A,Programming Lab,Faculty-358,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-14,Year-2,A,Database Lab,Faculty-359,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-14,Year-2,A,Networks Lab,Faculty-360,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-14,Year-2,B,Mathematics,Faculty-361,4,THEORY,,2
+Class-14,Year-2,B,Programming Fundamentals,Faculty-362,4,THEORY,,2
+Class-14,Year-2,B,Data Structures,Faculty-363,4,THEORY,,2
+Class-14,Year-2,B,Database Systems,Faculty-364,4,THEORY,,2
+Class-14,Year-2,B,Communication Skills,Faculty-365,4,THEORY,,2
+Class-14,Year-2,B,Operating Systems,Faculty-366,4,THEORY,,2
+Class-14,Year-2,B,Programming Lab,Faculty-367,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-14,Year-2,B,Database Lab,Faculty-368,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-14,Year-2,B,Networks Lab,Faculty-369,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-14,Year-2,C,Mathematics,Faculty-370,4,THEORY,,2
+Class-14,Year-2,C,Programming Fundamentals,Faculty-371,4,THEORY,,2
+Class-14,Year-2,C,Data Structures,Faculty-372,4,THEORY,,2
+Class-14,Year-2,C,Database Systems,Faculty-373,4,THEORY,,2
+Class-14,Year-2,C,Communication Skills,Faculty-374,4,THEORY,,2
+Class-14,Year-2,C,Operating Systems,Faculty-375,4,THEORY,,2
+Class-14,Year-2,C,Programming Lab,Faculty-376,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-14,Year-2,C,Database Lab,Faculty-377,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-14,Year-2,C,Networks Lab,Faculty-378,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-15,Year-3,A,Mathematics,Faculty-379,4,THEORY,,2
+Class-15,Year-3,A,Programming Fundamentals,Faculty-380,4,THEORY,,2
+Class-15,Year-3,A,Data Structures,Faculty-381,4,THEORY,,2
+Class-15,Year-3,A,Database Systems,Faculty-382,4,THEORY,,2
+Class-15,Year-3,A,Communication Skills,Faculty-383,4,THEORY,,2
+Class-15,Year-3,A,Operating Systems,Faculty-384,4,THEORY,,2
+Class-15,Year-3,A,Programming Lab,Faculty-385,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-15,Year-3,A,Database Lab,Faculty-386,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-15,Year-3,A,Networks Lab,Faculty-387,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-15,Year-3,B,Mathematics,Faculty-388,4,THEORY,,2
+Class-15,Year-3,B,Programming Fundamentals,Faculty-389,4,THEORY,,2
+Class-15,Year-3,B,Data Structures,Faculty-390,4,THEORY,,2
+Class-15,Year-3,B,Database Systems,Faculty-391,4,THEORY,,2
+Class-15,Year-3,B,Communication Skills,Faculty-392,4,THEORY,,2
+Class-15,Year-3,B,Operating Systems,Faculty-393,4,THEORY,,2
+Class-15,Year-3,B,Programming Lab,Faculty-394,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-15,Year-3,B,Database Lab,Faculty-395,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-15,Year-3,B,Networks Lab,Faculty-396,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-15,Year-3,C,Mathematics,Faculty-397,4,THEORY,,2
+Class-15,Year-3,C,Programming Fundamentals,Faculty-398,4,THEORY,,2
+Class-15,Year-3,C,Data Structures,Faculty-399,4,THEORY,,2
+Class-15,Year-3,C,Database Systems,Faculty-400,4,THEORY,,2
+Class-15,Year-3,C,Communication Skills,Faculty-401,4,THEORY,,2
+Class-15,Year-3,C,Operating Systems,Faculty-402,4,THEORY,,2
+Class-15,Year-3,C,Programming Lab,Faculty-403,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-15,Year-3,C,Database Lab,Faculty-404,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-15,Year-3,C,Networks Lab,Faculty-405,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-16,Year-4,A,Mathematics,Faculty-406,4,THEORY,,2
+Class-16,Year-4,A,Programming Fundamentals,Faculty-407,4,THEORY,,2
+Class-16,Year-4,A,Data Structures,Faculty-408,4,THEORY,,2
+Class-16,Year-4,A,Database Systems,Faculty-409,4,THEORY,,2
+Class-16,Year-4,A,Communication Skills,Faculty-410,4,THEORY,,2
+Class-16,Year-4,A,Operating Systems,Faculty-411,4,THEORY,,2
+Class-16,Year-4,A,Programming Lab,Faculty-412,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-16,Year-4,A,Database Lab,Faculty-413,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-16,Year-4,A,Networks Lab,Faculty-414,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-16,Year-4,B,Mathematics,Faculty-415,4,THEORY,,2
+Class-16,Year-4,B,Programming Fundamentals,Faculty-416,4,THEORY,,2
+Class-16,Year-4,B,Data Structures,Faculty-417,4,THEORY,,2
+Class-16,Year-4,B,Database Systems,Faculty-418,4,THEORY,,2
+Class-16,Year-4,B,Communication Skills,Faculty-419,4,THEORY,,2
+Class-16,Year-4,B,Operating Systems,Faculty-420,4,THEORY,,2
+Class-16,Year-4,B,Programming Lab,Faculty-421,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-16,Year-4,B,Database Lab,Faculty-422,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-16,Year-4,B,Networks Lab,Faculty-423,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-16,Year-4,C,Mathematics,Faculty-424,4,THEORY,,2
+Class-16,Year-4,C,Programming Fundamentals,Faculty-425,4,THEORY,,2
+Class-16,Year-4,C,Data Structures,Faculty-426,4,THEORY,,2
+Class-16,Year-4,C,Database Systems,Faculty-427,4,THEORY,,2
+Class-16,Year-4,C,Communication Skills,Faculty-428,4,THEORY,,2
+Class-16,Year-4,C,Operating Systems,Faculty-429,4,THEORY,,2
+Class-16,Year-4,C,Programming Lab,Faculty-430,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-16,Year-4,C,Database Lab,Faculty-431,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-16,Year-4,C,Networks Lab,Faculty-432,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-17,Year-1,A,Mathematics,Faculty-433,4,THEORY,,2
+Class-17,Year-1,A,Programming Fundamentals,Faculty-434,4,THEORY,,2
+Class-17,Year-1,A,Data Structures,Faculty-435,4,THEORY,,2
+Class-17,Year-1,A,Database Systems,Faculty-436,4,THEORY,,2
+Class-17,Year-1,A,Communication Skills,Faculty-437,4,THEORY,,2
+Class-17,Year-1,A,Operating Systems,Faculty-438,4,THEORY,,2
+Class-17,Year-1,A,Programming Lab,Faculty-439,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-17,Year-1,A,Database Lab,Faculty-440,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-17,Year-1,A,Networks Lab,Faculty-441,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-17,Year-1,B,Mathematics,Faculty-442,4,THEORY,,2
+Class-17,Year-1,B,Programming Fundamentals,Faculty-443,4,THEORY,,2
+Class-17,Year-1,B,Data Structures,Faculty-444,4,THEORY,,2
+Class-17,Year-1,B,Database Systems,Faculty-445,4,THEORY,,2
+Class-17,Year-1,B,Communication Skills,Faculty-446,4,THEORY,,2
+Class-17,Year-1,B,Operating Systems,Faculty-447,4,THEORY,,2
+Class-17,Year-1,B,Programming Lab,Faculty-448,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-17,Year-1,B,Database Lab,Faculty-449,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-17,Year-1,B,Networks Lab,Faculty-450,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-17,Year-1,C,Mathematics,Faculty-451,4,THEORY,,2
+Class-17,Year-1,C,Programming Fundamentals,Faculty-452,4,THEORY,,2
+Class-17,Year-1,C,Data Structures,Faculty-453,4,THEORY,,2
+Class-17,Year-1,C,Database Systems,Faculty-454,4,THEORY,,2
+Class-17,Year-1,C,Communication Skills,Faculty-455,4,THEORY,,2
+Class-17,Year-1,C,Operating Systems,Faculty-456,4,THEORY,,2
+Class-17,Year-1,C,Programming Lab,Faculty-457,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-17,Year-1,C,Database Lab,Faculty-458,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-17,Year-1,C,Networks Lab,Faculty-459,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-18,Year-2,A,Mathematics,Faculty-460,4,THEORY,,2
+Class-18,Year-2,A,Programming Fundamentals,Faculty-461,4,THEORY,,2
+Class-18,Year-2,A,Data Structures,Faculty-462,4,THEORY,,2
+Class-18,Year-2,A,Database Systems,Faculty-463,4,THEORY,,2
+Class-18,Year-2,A,Communication Skills,Faculty-464,4,THEORY,,2
+Class-18,Year-2,A,Operating Systems,Faculty-465,4,THEORY,,2
+Class-18,Year-2,A,Programming Lab,Faculty-466,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-18,Year-2,A,Database Lab,Faculty-467,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-18,Year-2,A,Networks Lab,Faculty-468,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-18,Year-2,B,Mathematics,Faculty-469,4,THEORY,,2
+Class-18,Year-2,B,Programming Fundamentals,Faculty-470,4,THEORY,,2
+Class-18,Year-2,B,Data Structures,Faculty-471,4,THEORY,,2
+Class-18,Year-2,B,Database Systems,Faculty-472,4,THEORY,,2
+Class-18,Year-2,B,Communication Skills,Faculty-473,4,THEORY,,2
+Class-18,Year-2,B,Operating Systems,Faculty-474,4,THEORY,,2
+Class-18,Year-2,B,Programming Lab,Faculty-475,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-18,Year-2,B,Database Lab,Faculty-476,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-18,Year-2,B,Networks Lab,Faculty-477,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-18,Year-2,C,Mathematics,Faculty-478,4,THEORY,,2
+Class-18,Year-2,C,Programming Fundamentals,Faculty-479,4,THEORY,,2
+Class-18,Year-2,C,Data Structures,Faculty-480,4,THEORY,,2
+Class-18,Year-2,C,Database Systems,Faculty-481,4,THEORY,,2
+Class-18,Year-2,C,Communication Skills,Faculty-482,4,THEORY,,2
+Class-18,Year-2,C,Operating Systems,Faculty-483,4,THEORY,,2
+Class-18,Year-2,C,Programming Lab,Faculty-484,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-18,Year-2,C,Database Lab,Faculty-485,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-18,Year-2,C,Networks Lab,Faculty-486,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-19,Year-3,A,Mathematics,Faculty-487,4,THEORY,,2
+Class-19,Year-3,A,Programming Fundamentals,Faculty-488,4,THEORY,,2
+Class-19,Year-3,A,Data Structures,Faculty-489,4,THEORY,,2
+Class-19,Year-3,A,Database Systems,Faculty-490,4,THEORY,,2
+Class-19,Year-3,A,Communication Skills,Faculty-491,4,THEORY,,2
+Class-19,Year-3,A,Operating Systems,Faculty-492,4,THEORY,,2
+Class-19,Year-3,A,Programming Lab,Faculty-493,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-19,Year-3,A,Database Lab,Faculty-494,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-19,Year-3,A,Networks Lab,Faculty-495,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-19,Year-3,B,Mathematics,Faculty-496,4,THEORY,,2
+Class-19,Year-3,B,Programming Fundamentals,Faculty-497,4,THEORY,,2
+Class-19,Year-3,B,Data Structures,Faculty-498,4,THEORY,,2
+Class-19,Year-3,B,Database Systems,Faculty-499,4,THEORY,,2
+Class-19,Year-3,B,Communication Skills,Faculty-500,4,THEORY,,2
+Class-19,Year-3,B,Operating Systems,Faculty-501,4,THEORY,,2
+Class-19,Year-3,B,Programming Lab,Faculty-502,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-19,Year-3,B,Database Lab,Faculty-503,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-19,Year-3,B,Networks Lab,Faculty-504,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-19,Year-3,C,Mathematics,Faculty-505,4,THEORY,,2
+Class-19,Year-3,C,Programming Fundamentals,Faculty-506,4,THEORY,,2
+Class-19,Year-3,C,Data Structures,Faculty-507,4,THEORY,,2
+Class-19,Year-3,C,Database Systems,Faculty-508,4,THEORY,,2
+Class-19,Year-3,C,Communication Skills,Faculty-509,4,THEORY,,2
+Class-19,Year-3,C,Operating Systems,Faculty-510,4,THEORY,,2
+Class-19,Year-3,C,Programming Lab,Faculty-511,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-19,Year-3,C,Database Lab,Faculty-512,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-19,Year-3,C,Networks Lab,Faculty-513,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-20,Year-4,A,Mathematics,Faculty-514,4,THEORY,,2
+Class-20,Year-4,A,Programming Fundamentals,Faculty-515,4,THEORY,,2
+Class-20,Year-4,A,Data Structures,Faculty-516,4,THEORY,,2
+Class-20,Year-4,A,Database Systems,Faculty-517,4,THEORY,,2
+Class-20,Year-4,A,Communication Skills,Faculty-518,4,THEORY,,2
+Class-20,Year-4,A,Operating Systems,Faculty-519,4,THEORY,,2
+Class-20,Year-4,A,Programming Lab,Faculty-520,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-20,Year-4,A,Database Lab,Faculty-521,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-20,Year-4,A,Networks Lab,Faculty-522,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-20,Year-4,B,Mathematics,Faculty-523,4,THEORY,,2
+Class-20,Year-4,B,Programming Fundamentals,Faculty-524,4,THEORY,,2
+Class-20,Year-4,B,Data Structures,Faculty-525,4,THEORY,,2
+Class-20,Year-4,B,Database Systems,Faculty-526,4,THEORY,,2
+Class-20,Year-4,B,Communication Skills,Faculty-527,4,THEORY,,2
+Class-20,Year-4,B,Operating Systems,Faculty-528,4,THEORY,,2
+Class-20,Year-4,B,Programming Lab,Faculty-529,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-20,Year-4,B,Database Lab,Faculty-530,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-20,Year-4,B,Networks Lab,Faculty-531,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-20,Year-4,C,Mathematics,Faculty-532,4,THEORY,,2
+Class-20,Year-4,C,Programming Fundamentals,Faculty-533,4,THEORY,,2
+Class-20,Year-4,C,Data Structures,Faculty-534,4,THEORY,,2
+Class-20,Year-4,C,Database Systems,Faculty-535,4,THEORY,,2
+Class-20,Year-4,C,Communication Skills,Faculty-536,4,THEORY,,2
+Class-20,Year-4,C,Operating Systems,Faculty-537,4,THEORY,,2
+Class-20,Year-4,C,Programming Lab,Faculty-538,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-20,Year-4,C,Database Lab,Faculty-539,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-20,Year-4,C,Networks Lab,Faculty-540,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-21,Year-1,A,Mathematics,Faculty-541,4,THEORY,,2
+Class-21,Year-1,A,Programming Fundamentals,Faculty-542,4,THEORY,,2
+Class-21,Year-1,A,Data Structures,Faculty-543,4,THEORY,,2
+Class-21,Year-1,A,Database Systems,Faculty-544,4,THEORY,,2
+Class-21,Year-1,A,Communication Skills,Faculty-545,4,THEORY,,2
+Class-21,Year-1,A,Operating Systems,Faculty-546,4,THEORY,,2
+Class-21,Year-1,A,Programming Lab,Faculty-547,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-21,Year-1,A,Database Lab,Faculty-548,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-21,Year-1,A,Networks Lab,Faculty-549,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-21,Year-1,B,Mathematics,Faculty-550,4,THEORY,,2
+Class-21,Year-1,B,Programming Fundamentals,Faculty-551,4,THEORY,,2
+Class-21,Year-1,B,Data Structures,Faculty-552,4,THEORY,,2
+Class-21,Year-1,B,Database Systems,Faculty-553,4,THEORY,,2
+Class-21,Year-1,B,Communication Skills,Faculty-554,4,THEORY,,2
+Class-21,Year-1,B,Operating Systems,Faculty-555,4,THEORY,,2
+Class-21,Year-1,B,Programming Lab,Faculty-556,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-21,Year-1,B,Database Lab,Faculty-557,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-21,Year-1,B,Networks Lab,Faculty-558,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-21,Year-1,C,Mathematics,Faculty-559,4,THEORY,,2
+Class-21,Year-1,C,Programming Fundamentals,Faculty-560,4,THEORY,,2
+Class-21,Year-1,C,Data Structures,Faculty-561,4,THEORY,,2
+Class-21,Year-1,C,Database Systems,Faculty-562,4,THEORY,,2
+Class-21,Year-1,C,Communication Skills,Faculty-563,4,THEORY,,2
+Class-21,Year-1,C,Operating Systems,Faculty-564,4,THEORY,,2
+Class-21,Year-1,C,Programming Lab,Faculty-565,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-21,Year-1,C,Database Lab,Faculty-566,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-21,Year-1,C,Networks Lab,Faculty-567,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-22,Year-2,A,Mathematics,Faculty-568,4,THEORY,,2
+Class-22,Year-2,A,Programming Fundamentals,Faculty-569,4,THEORY,,2
+Class-22,Year-2,A,Data Structures,Faculty-570,4,THEORY,,2
+Class-22,Year-2,A,Database Systems,Faculty-571,4,THEORY,,2
+Class-22,Year-2,A,Communication Skills,Faculty-572,4,THEORY,,2
+Class-22,Year-2,A,Operating Systems,Faculty-573,4,THEORY,,2
+Class-22,Year-2,A,Programming Lab,Faculty-574,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-22,Year-2,A,Database Lab,Faculty-575,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-22,Year-2,A,Networks Lab,Faculty-576,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-22,Year-2,B,Mathematics,Faculty-577,4,THEORY,,2
+Class-22,Year-2,B,Programming Fundamentals,Faculty-578,4,THEORY,,2
+Class-22,Year-2,B,Data Structures,Faculty-579,4,THEORY,,2
+Class-22,Year-2,B,Database Systems,Faculty-580,4,THEORY,,2
+Class-22,Year-2,B,Communication Skills,Faculty-581,4,THEORY,,2
+Class-22,Year-2,B,Operating Systems,Faculty-582,4,THEORY,,2
+Class-22,Year-2,B,Programming Lab,Faculty-583,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-22,Year-2,B,Database Lab,Faculty-584,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-22,Year-2,B,Networks Lab,Faculty-585,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-22,Year-2,C,Mathematics,Faculty-586,4,THEORY,,2
+Class-22,Year-2,C,Programming Fundamentals,Faculty-587,4,THEORY,,2
+Class-22,Year-2,C,Data Structures,Faculty-588,4,THEORY,,2
+Class-22,Year-2,C,Database Systems,Faculty-589,4,THEORY,,2
+Class-22,Year-2,C,Communication Skills,Faculty-590,4,THEORY,,2
+Class-22,Year-2,C,Operating Systems,Faculty-591,4,THEORY,,2
+Class-22,Year-2,C,Programming Lab,Faculty-592,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-22,Year-2,C,Database Lab,Faculty-593,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-22,Year-2,C,Networks Lab,Faculty-594,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-23,Year-3,A,Mathematics,Faculty-595,4,THEORY,,2
+Class-23,Year-3,A,Programming Fundamentals,Faculty-596,4,THEORY,,2
+Class-23,Year-3,A,Data Structures,Faculty-597,4,THEORY,,2
+Class-23,Year-3,A,Database Systems,Faculty-598,4,THEORY,,2
+Class-23,Year-3,A,Communication Skills,Faculty-599,4,THEORY,,2
+Class-23,Year-3,A,Operating Systems,Faculty-600,4,THEORY,,2
+Class-23,Year-3,A,Programming Lab,Faculty-601,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-23,Year-3,A,Database Lab,Faculty-602,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-23,Year-3,A,Networks Lab,Faculty-603,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-23,Year-3,B,Mathematics,Faculty-604,4,THEORY,,2
+Class-23,Year-3,B,Programming Fundamentals,Faculty-605,4,THEORY,,2
+Class-23,Year-3,B,Data Structures,Faculty-606,4,THEORY,,2
+Class-23,Year-3,B,Database Systems,Faculty-607,4,THEORY,,2
+Class-23,Year-3,B,Communication Skills,Faculty-608,4,THEORY,,2
+Class-23,Year-3,B,Operating Systems,Faculty-609,4,THEORY,,2
+Class-23,Year-3,B,Programming Lab,Faculty-610,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-23,Year-3,B,Database Lab,Faculty-611,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-23,Year-3,B,Networks Lab,Faculty-612,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-23,Year-3,C,Mathematics,Faculty-613,4,THEORY,,2
+Class-23,Year-3,C,Programming Fundamentals,Faculty-614,4,THEORY,,2
+Class-23,Year-3,C,Data Structures,Faculty-615,4,THEORY,,2
+Class-23,Year-3,C,Database Systems,Faculty-616,4,THEORY,,2
+Class-23,Year-3,C,Communication Skills,Faculty-617,4,THEORY,,2
+Class-23,Year-3,C,Operating Systems,Faculty-618,4,THEORY,,2
+Class-23,Year-3,C,Programming Lab,Faculty-619,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-23,Year-3,C,Database Lab,Faculty-620,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-23,Year-3,C,Networks Lab,Faculty-621,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-24,Year-4,A,Mathematics,Faculty-622,4,THEORY,,2
+Class-24,Year-4,A,Programming Fundamentals,Faculty-623,4,THEORY,,2
+Class-24,Year-4,A,Data Structures,Faculty-624,4,THEORY,,2
+Class-24,Year-4,A,Database Systems,Faculty-625,4,THEORY,,2
+Class-24,Year-4,A,Communication Skills,Faculty-626,4,THEORY,,2
+Class-24,Year-4,A,Operating Systems,Faculty-627,4,THEORY,,2
+Class-24,Year-4,A,Programming Lab,Faculty-628,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-24,Year-4,A,Database Lab,Faculty-629,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-24,Year-4,A,Networks Lab,Faculty-630,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-24,Year-4,B,Mathematics,Faculty-631,4,THEORY,,2
+Class-24,Year-4,B,Programming Fundamentals,Faculty-632,4,THEORY,,2
+Class-24,Year-4,B,Data Structures,Faculty-633,4,THEORY,,2
+Class-24,Year-4,B,Database Systems,Faculty-634,4,THEORY,,2
+Class-24,Year-4,B,Communication Skills,Faculty-635,4,THEORY,,2
+Class-24,Year-4,B,Operating Systems,Faculty-636,4,THEORY,,2
+Class-24,Year-4,B,Programming Lab,Faculty-637,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-24,Year-4,B,Database Lab,Faculty-638,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-24,Year-4,B,Networks Lab,Faculty-639,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
+Class-24,Year-4,C,Mathematics,Faculty-640,4,THEORY,,2
+Class-24,Year-4,C,Programming Fundamentals,Faculty-641,4,THEORY,,2
+Class-24,Year-4,C,Data Structures,Faculty-642,4,THEORY,,2
+Class-24,Year-4,C,Database Systems,Faculty-643,4,THEORY,,2
+Class-24,Year-4,C,Communication Skills,Faculty-644,4,THEORY,,2
+Class-24,Year-4,C,Operating Systems,Faculty-645,4,THEORY,,2
+Class-24,Year-4,C,Programming Lab,Faculty-646,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10|LAB-11|LAB-12|LAB-13|LAB-14|LAB-15|LAB-16|LAB-17|LAB-18,2
+Class-24,Year-4,C,Database Lab,Faculty-647,2,LAB,LAB-19|LAB-20|LAB-21|LAB-22|LAB-23|LAB-24|LAB-25|LAB-26|LAB-27|LAB-28|LAB-29|LAB-30|LAB-31|LAB-32|LAB-33|LAB-34|LAB-35|LAB-36,2
+Class-24,Year-4,C,Networks Lab,Faculty-648,2,LAB,LAB-37|LAB-38|LAB-39|LAB-40|LAB-41|LAB-42|LAB-43|LAB-44|LAB-45|LAB-46|LAB-47|LAB-48|LAB-49|LAB-50|LAB-51|LAB-52|LAB-53|LAB-54,2
