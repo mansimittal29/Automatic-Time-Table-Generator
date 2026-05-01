@@ -38,6 +38,7 @@ A simplified Flask-based timetable generator for local college project demos.
 - Role-based login (ADMIN/HOD/FACULTY/STUDENT) with seeded admin account
 - Database-backed master data modules for departments, faculty, rooms, sections, and subjects
 - Database-backed Assignment Master module for class/subject/faculty lecture rows
+- Security and operations pages for audit logs, password changes, absence substitution, and slot locking
 - Master data pages support create, edit, and delete operations
 - Includes `migrate_db.py` for predictable schema upgrades on existing databases
 - Timetable version workflow with draft, approve, and publish states
@@ -46,6 +47,15 @@ A simplified Flask-based timetable generator for local college project demos.
 - Conflict-aware manual edit validation (teacher clash, room clash, lunch slot violation, ambiguous faculty slot edits)
 - Every accepted manual edit is saved as a new draft version for review and publish
 - Start demo with a single double-click using start_demo.bat
+
+## Data Load Capacity
+
+The app does not impose a fixed row limit for timetable records, but it does enforce a request size limit and shows a capacity estimate during validation.
+
+- Default request payload limit: 10 MB
+- Configurable with `TIMETABLE_MAX_CONTENT_LENGTH_MB`
+- Validation uses an approximate capacity formula based on working days, periods per day, rooms, and section count
+- If total lectures exceed the estimate, increase rooms, working days, or periods per day, or reduce the lecture load
 
 ## Large-Scale Preset Included
 
@@ -96,19 +106,6 @@ One direct lab row from the working example:
 
 Class-01,Year-1,A,Programming Lab,Faculty-19,2,LAB,LAB-01|LAB-02|LAB-03|LAB-04|LAB-05|LAB-06|LAB-07|LAB-08|LAB-09|LAB-10,2
 
-## One-Click Large Demo Example
-
-On the index page, click **Load Large Demo Dataset** to auto-fill a deterministic high-volume demo set.
-
-Loaded dataset shape:
-
-- 40 classes x 3 sections = 120 sections
-- 5 theory + 6 lab subjects per section
-- 1320 assignment rows total
-- 250 rooms total (140 classroom + 110 labs)
-- 1320 faculty daily-limit rows
-- LAB rows are auto-split into G1/G2/G3 groups and scheduled in the same slot with distinct lab rooms
-- Faculty rest rule is active: no back-to-back periods for the same teacher (except the two periods of one LAB block)
 
 ## Project Structure
 
@@ -209,8 +206,6 @@ timetable-generator/
    Class,Standard,Section,HomeRoom
 - Faculty Daily Limit Overrides: one row per line in format
    FacultyName,MaxPeriodsPerDay
-- Faculty Unavailability: one row per line in format
-   FacultyName,Day,Period
 - Fixed Slot Constraints: one row per line in format
    Class,Standard,Section,Subject,Teacher,Day,StartPeriod[,Duration[,Room]]
 
@@ -229,10 +224,6 @@ Class-01,Year-1,A,CR-101
 Example Faculty Daily Override row:
 
 Faculty-01,7
-
-Example Faculty Unavailability row:
-
-Faculty-01,Tuesday,3
 
 Example Fixed Slot row:
 
