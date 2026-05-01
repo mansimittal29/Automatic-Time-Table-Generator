@@ -101,7 +101,9 @@
                             <th>Full Name</th>
                             <th>Email</th>
                             <th>Role</th>
-                            <th>Profile</th>
+                            <th>Class</th>
+                            <th>Section</th>
+                            <th>Year</th>
                             <th>Status</th>
                             <th>Pwd Change?</th>
                             <th>Created</th>
@@ -111,18 +113,15 @@
                     <tbody>
                         {% for user in users %}
                             <tr>
+                                {% set user_role_code = user.role.code if user.role else '' %}
                                 <td>{{ user.id }}</td>
                                 <td>{{ user.username }}</td>
                                 <td>{{ user.full_name }}</td>
                                 <td>{{ user.email or '-' }}</td>
-                                <td>{{ user.role.code if user.role else '-' }}</td>
-                                <td>
-                                    {% if user.profile_class_name and user.profile_standard and user.profile_section_code %}
-                                        {{ user.profile_class_name }} | {{ user.profile_standard }} | {{ user.profile_section_code }}
-                                    {% else %}
-                                        -
-                                    {% endif %}
-                                </td>
+                                <td>{{ user_role_code or '-' }}</td>
+                                <td>{{ (user.profile_class_name or '-') if user_role_code == 'STUDENT' else '-' }}</td>
+                                <td>{{ (user.profile_section_code or '-') if user_role_code == 'STUDENT' else '-' }}</td>
+                                <td>{{ (user.profile_standard or '-') if user_role_code == 'STUDENT' else '-' }}</td>
                                 <td>{{ 'ACTIVE' if user.is_active else 'INACTIVE' }}</td>
                                 <td>
                                     {% if user.must_change_password %}
@@ -193,19 +192,19 @@
                                             </div>
                                         </form>
                                     </div>
-                                    <div class="collapse mt-2" id="reset-pwd-{{ user.id }}">
+                                    <div class="collapse mt-3" id="reset-pwd-{{ user.id }}">
                                         <form method="post" action="{{ url_for('admin_reset_password', user_id=user.id) }}" class="compact-inline-form">
                                             <input type="password" class="form-control form-control-sm compact-input admin-reset-pwd" name="new_password"
                                                 placeholder="New password (min 10)" minlength="10" required>
                                             <button type="submit" class="btn btn-sm btn-warning">Set</button>
-                                            <small class="d-block form-text" style="margin-top: 0.3rem;\">Must be 10+ characters, no leading/trailing spaces</small>
+                                            <div class="d-block form-text" style="margin-top: 0.3rem;\">Must be 10+ characters, no leading/trailing spaces</div>
                                         </form>
                                     </div>
                                 </td>
                             </tr>
                         {% else %}
                             <tr>
-                                <td colspan="10" class="text-center text-muted">No users found.</td>
+                                <td colspan="12" class="text-center text-muted">No users found.</td>
                             </tr>
                         {% endfor %}
                     </tbody>

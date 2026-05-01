@@ -6,6 +6,7 @@ import os
 import random
 from collections import Counter
 from datetime import datetime, timezone
+from itertools import combinations
 from pathlib import Path
 from typing import Dict, List, Set, Tuple
 
@@ -19,7 +20,7 @@ from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 
 DAY_NAMES = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-LAB_GROUP_COUNT = 3
+DEFAULT_LAB_GROUP_COUNT = 3
 TimetableCell = Dict[str, object]
 TimetableMatrix = List[List[TimetableCell | None]]
 SectionTable = Dict[str, object]
@@ -51,7 +52,7 @@ def _extract_section_group(section: str) -> Tuple[str, int | None]:
         return cleaned, None
 
     suffix = upper_cleaned[marker_index + len(marker):]
-    if suffix in {str(index) for index in range(1, LAB_GROUP_COUNT + 1)}:
+    if suffix.isdigit() and int(suffix) >= 1:
         return cleaned[:marker_index], int(suffix)
 
     return cleaned, None
@@ -110,59 +111,57 @@ def _can_assign_distinct_rooms(room_options: List[List[str]]) -> bool:
     return backtrack(0)
 
 
-def _pick_lab_triplet_with_distinct_faculty(
+def _pick_lab_bundle_with_distinct_faculty(
     session_units: List[Dict[str, object]],
+    desired_size: int,
+    minimum_size: int = 1,
 ) -> List[Dict[str, object]] | None:
-    if len(session_units) < 3:
+    if desired_size < 1 or not session_units:
         return None
 
-    best_triplet: List[Dict[str, object]] | None = None
-    best_score: Tuple[int, int, int, int] | None = None
+    clamped_desired = min(desired_size, len(session_units))
+    clamped_minimum = max(1, min(minimum_size, clamped_desired))
 
-    for first_index in range(len(session_units) - 2):
-        first = session_units[first_index]
-        first_teacher = str(first["teacher"])
+    best_bundle: List[Dict[str, object]] | None = None
+    best_score: Tuple[int, int, int, int, int] | None = None
 
-        for second_index in range(first_index + 1, len(session_units) - 1):
-            second = session_units[second_index]
-            second_teacher = str(second["teacher"])
-            if second_teacher == first_teacher:
+    for bundle_size in range(clamped_desired, clamped_minimum - 1, -1):
+        for combo in combinations(session_units, bundle_size):
+            teachers = {str(item["teacher"]) for item in combo}
+            if len(teachers) != bundle_size:
                 continue
 
-            for third_index in range(second_index + 1, len(session_units)):
-                third = session_units[third_index]
-                third_teacher = str(third["teacher"])
-                if third_teacher in {first_teacher, second_teacher}:
-                    continue
+            room_options = [list(item.get("allowed_rooms", [])) for item in combo]
+            if not _can_assign_distinct_rooms(room_options):
+                continue
 
-                triplet = [first, second, third]
-                room_options = [list(item.get("allowed_rooms", [])) for item in triplet]
-                if not _can_assign_distinct_rooms(room_options):
-                    continue
+            subject_diversity = len({str(item["subject"]) for item in combo})
+            room_option_count = sum(len(item.get("allowed_rooms", [])) for item in combo)
+            distinct_room_variety = len(
+                {
+                    str(room_name).strip()
+                    for options in room_options
+                    for room_name in options
+                    if str(room_name).strip()
+                }
+            )
+            source_order_score = -sum(int(item.get("source_index", 0)) for item in combo)
+            score = (
+                bundle_size,
+                subject_diversity,
+                distinct_room_variety,
+                room_option_count,
+                source_order_score,
+            )
 
-                subject_diversity = len({str(item["subject"]) for item in triplet})
-                room_option_count = sum(len(item.get("allowed_rooms", [])) for item in triplet)
-                distinct_room_variety = len(
-                    {
-                        str(room_name).strip()
-                        for options in room_options
-                        for room_name in options
-                        if str(room_name).strip()
-                    }
-                )
-                source_order_score = -sum(int(item.get("source_index", 0)) for item in triplet)
-                score = (
-                    subject_diversity,
-                    distinct_room_variety,
-                    room_option_count,
-                    source_order_score,
-                )
+            if best_score is None or score > best_score:
+                best_score = score
+                best_bundle = list(combo)
 
-                if best_score is None or score > best_score:
-                    best_score = score
-                    best_triplet = triplet
+        if best_bundle is not None:
+            return best_bundle
 
-    return best_triplet
+    return None
 
 
 def _expand_assignments_for_lab_groups(
@@ -170,6 +169,7 @@ def _expand_assignments_for_lab_groups(
 ) -> List[FacultyAssignment]:
     expanded_assignments: List[FacultyAssignment] = []
     lab_sessions_by_base_section: Dict[Tuple[str, str, str], List[Dict[str, object]]] = {}
+    lab_group_count_by_base_section: Dict[Tuple[str, str, str], int] = {}
 
     for source_index, assignment in enumerate(assignments):
         class_name = str(assignment["class_name"])
@@ -222,6 +222,7 @@ def _expand_assignments_for_lab_groups(
             bundle_key = str(assignment.get("lab_bundle_key", "")).strip()
             if bundle_key:
                 normalized_assignment["lab_bundle_key"] = bundle_key
+            normalized_assignment["lab_group_count"] = int(assignment.get("lab_group_count", 1) or 1)
             expanded_assignments.append(normalized_assignment)
             continue
 
@@ -230,16 +231,42 @@ def _expand_assignments_for_lab_groups(
                 f"LAB assignment {class_name}-{standard}-{section} -> {subject_name} has odd lectures ({lectures})."
             )
 
+        raw_group_count = assignment.get("lab_group_count", DEFAULT_LAB_GROUP_COUNT)
+        try:
+            lab_group_count = int(raw_group_count)
+        except (TypeError, ValueError) as error:
+            raise ValueError(
+                f"LAB assignment {class_name}-{standard}-{section} -> {subject_name} has invalid lab_group_count '{raw_group_count}'."
+            ) from error
+
+        if lab_group_count < 1:
+            raise ValueError(
+                f"LAB assignment {class_name}-{standard}-{section} -> {subject_name} must have lab_group_count >= 1."
+            )
+
         session_count = lectures // 2
         if session_count < 1:
             raise ValueError(
                 f"LAB assignment {class_name}-{standard}-{section} -> {subject_name} must have at least 2 lectures."
             )
 
-        # Interpret base-section LAB load as per group and replicate it to all groups.
-        session_count *= LAB_GROUP_COUNT
+        if lab_group_count == 1:
+            normalized_assignment["lab_group_count"] = 1
+            expanded_assignments.append(normalized_assignment)
+            continue
+
+        # Interpret base-section LAB load as per subgroup and replicate it across all subgroups.
+        session_count *= lab_group_count
 
         section_key = (class_name, standard, section)
+        configured_group_count = lab_group_count_by_base_section.get(section_key)
+        if configured_group_count is None:
+            lab_group_count_by_base_section[section_key] = lab_group_count
+        elif configured_group_count != lab_group_count:
+            raise ValueError(
+                f"{build_section_key(class_name, standard, section)} has mixed lab_group_count values ({configured_group_count} and {lab_group_count})."
+            )
+
         section_sessions = lab_sessions_by_base_section.setdefault(section_key, [])
         for session_index in range(session_count):
             section_sessions.append(
@@ -253,32 +280,36 @@ def _expand_assignments_for_lab_groups(
                     "subject_daily_max": subject_daily_max,
                     "source_index": source_index,
                     "session_index": session_index,
+                    "lab_group_count": lab_group_count,
                 }
             )
 
     for class_name, standard, base_section in sorted(lab_sessions_by_base_section.keys()):
         remaining_sessions = list(lab_sessions_by_base_section[(class_name, standard, base_section)])
         section_subject_count = len({str(item.get("subject", "")).strip() for item in remaining_sessions})
-
-        if len(remaining_sessions) % LAB_GROUP_COUNT != 0:
-            raise ValueError(
-                f"{build_section_key(class_name, standard, base_section)} has {len(remaining_sessions)} LAB sessions. "
-                f"LAB group splitting requires multiples of {LAB_GROUP_COUNT} sessions."
-            )
+        section_group_count = int(
+            lab_group_count_by_base_section.get((class_name, standard, base_section), DEFAULT_LAB_GROUP_COUNT)
+        )
+        concurrent_group_count = max(1, min(section_group_count, max(1, section_subject_count)))
 
         bundle_index = 1
         while remaining_sessions:
-            triplet = _pick_lab_triplet_with_distinct_faculty(remaining_sessions)
-            if triplet is None:
+            target_bundle_size = min(concurrent_group_count, len(remaining_sessions))
+            bundle_members = _pick_lab_bundle_with_distinct_faculty(
+                remaining_sessions,
+                desired_size=target_bundle_size,
+                minimum_size=1,
+            )
+            if bundle_members is None:
                 raise ValueError(
                     f"{build_section_key(class_name, standard, base_section)} LAB sessions cannot be split into "
-                    f"triplets with {LAB_GROUP_COUNT} distinct faculty and {LAB_GROUP_COUNT} distinct allowed rooms."
+                    f"bundles with distinct faculty and distinct allowed rooms."
                 )
 
-            for session in triplet:
+            for session in bundle_members:
                 remaining_sessions.remove(session)
 
-            triplet.sort(
+            bundle_members.sort(
                 key=lambda item: (
                     int(item.get("source_index", 0)),
                     int(item.get("session_index", 0)),
@@ -287,14 +318,20 @@ def _expand_assignments_for_lab_groups(
                 )
             )
 
-            # Rotate subject-to-group mapping by bundle index so groups alternate subjects over time.
-            rotation_offset = (bundle_index - 1) % LAB_GROUP_COUNT
-            rotated_triplet = triplet[rotation_offset:] + triplet[:rotation_offset]
+            # Rotate subject-to-group mapping by bundle index so subgroups alternate subjects over time.
+            local_rotation_offset = (bundle_index - 1) % len(bundle_members)
+            rotated_bundle_members = (
+                bundle_members[local_rotation_offset:] + bundle_members[:local_rotation_offset]
+            )
+            active_groups = [
+                ((bundle_index - 1 + group_offset) % section_group_count) + 1
+                for group_offset in range(len(rotated_bundle_members))
+            ]
 
             bundle_key = (
                 f"{build_section_key(class_name, standard, base_section)}::LAB-BUNDLE-{bundle_index}"
             )
-            for group_number, session in enumerate(rotated_triplet, start=1):
+            for group_number, session in zip(active_groups, rotated_bundle_members):
                 expanded_assignments.append(
                     {
                         "class_name": class_name,
@@ -309,6 +346,7 @@ def _expand_assignments_for_lab_groups(
                         "lab_bundle_key": bundle_key,
                         "lab_bundle_order": bundle_index,
                         "lab_subject_count": section_subject_count,
+                        "lab_group_count": section_group_count,
                     }
                 )
 
@@ -701,7 +739,7 @@ def build_class_timetable_tables(
 
                 bundle_keys = {str(cell.get("lab_bundle_key", "")).strip() for _, cell in slot_cells}
                 if (
-                    len(slot_cells) == 3
+                    len(slot_cells) >= 2
                     and all(bool(cell.get("is_lab", False)) for _, cell in slot_cells)
                     and len(bundle_keys) == 1
                     and "" not in bundle_keys
@@ -1065,6 +1103,15 @@ def generate_multi_section_timetable(
         lunch_break_periods,
         working_days,
         periods_per_day,
+    )
+    section_lunch_candidate_periods = [
+        period_number
+        for period_number in (5, 6)
+        if period_number <= periods_per_day
+    ]
+    auto_section_lunch_mode = bool(section_lunch_candidate_periods) and all(
+        not lunch_by_day.get(day_index, set())
+        for day_index in range(working_days)
     )
     section_home_rooms = section_home_rooms or {}
     faculty_daily_limits = faculty_daily_limits or {}
@@ -1521,6 +1568,8 @@ def generate_multi_section_timetable(
                 preassigned_room_usage.add(room_slot)
 
     slot_count_per_section = len(assignable_slots)
+    if auto_section_lunch_mode:
+        slot_count_per_section = max(0, slot_count_per_section - working_days)
     for section_key, lecture_count in section_total_lectures.items():
         if lecture_count > slot_count_per_section:
             raise ValueError(
@@ -1634,10 +1683,111 @@ def generate_multi_section_timetable(
         day_index: (
             min(lunch_by_day.get(day_index, set())) - 1
             if lunch_by_day.get(day_index, set())
-            else None
+            else (
+                section_lunch_candidate_periods[0] - 1
+                if auto_section_lunch_mode
+                else None
+            )
         )
         for day_index in range(working_days)
     }
+
+    section_keys = sorted(section_metadata.keys())
+    preassigned_lunch_window_usage: Dict[Tuple[str, int], Set[int]] = {}
+    for preassigned_block in list(normalized_locked_slots) + list(normalized_fixed_slots):
+        section_key = str(preassigned_block["section_key"])
+        day_index = int(preassigned_block["day_index"])
+        start_period = int(preassigned_block["start_period"])
+        duration = int(preassigned_block["duration"])
+        lunch_window_periods = preassigned_lunch_window_usage.setdefault((section_key, day_index), set())
+        for offset in range(duration):
+            period_number = start_period + offset + 1
+            if period_number in section_lunch_candidate_periods:
+                lunch_window_periods.add(period_number)
+
+    def build_auto_section_lunch_breaks_by_day(
+        generator: random.Random,
+    ) -> Dict[str, Dict[int, int]] | None:
+        if not auto_section_lunch_mode:
+            return {section_key: {} for section_key in section_keys}
+
+        section_lunch_by_day: Dict[str, Dict[int, int]] = {
+            section_key: {}
+            for section_key in section_keys
+        }
+
+        has_5 = 5 in section_lunch_candidate_periods
+        has_6 = 6 in section_lunch_candidate_periods
+
+        for day_index in range(working_days):
+            forced_fifth: List[str] = []
+            forced_sixth: List[str] = []
+            undecided_sections: List[str] = []
+
+            for section_key in section_keys:
+                occupied_periods = preassigned_lunch_window_usage.get((section_key, day_index), set())
+                has_period_5_occupied = 5 in occupied_periods
+                has_period_6_occupied = 6 in occupied_periods
+
+                if has_5 and has_6:
+                    if has_period_5_occupied and has_period_6_occupied:
+                        return None
+                    if has_period_5_occupied:
+                        section_lunch_by_day[section_key][day_index] = 6
+                        forced_sixth.append(section_key)
+                    elif has_period_6_occupied:
+                        section_lunch_by_day[section_key][day_index] = 5
+                        forced_fifth.append(section_key)
+                    else:
+                        undecided_sections.append(section_key)
+                elif has_5:
+                    if has_period_5_occupied:
+                        return None
+                    section_lunch_by_day[section_key][day_index] = 5
+                elif has_6:
+                    if has_period_6_occupied:
+                        return None
+                    section_lunch_by_day[section_key][day_index] = 6
+
+            if has_5 and has_6:
+                total_sections = len(section_keys)
+                if total_sections <= 1:
+                    target_sixth_count = total_sections
+                else:
+                    target_sixth_count = max(1, round(total_sections * 0.2))
+
+                min_sixth_count = len(forced_sixth)
+                max_sixth_count = total_sections - len(forced_fifth)
+                desired_sixth_count = max(min_sixth_count, min(target_sixth_count, max_sixth_count))
+                additional_sixth_needed = max(0, desired_sixth_count - len(forced_sixth))
+
+                if additional_sixth_needed > len(undecided_sections):
+                    return None
+
+                selected_sixth_sections = set(
+                    generator.sample(undecided_sections, additional_sixth_needed)
+                )
+                for section_key in undecided_sections:
+                    section_lunch_by_day[section_key][day_index] = (
+                        6 if section_key in selected_sixth_sections else 5
+                    )
+
+        return section_lunch_by_day
+
+    def block_intersects_section_lunch(
+        section_key: str,
+        block_slots: List[Tuple[int, int]],
+        section_lunch_by_day: Dict[str, Dict[int, int]],
+    ) -> bool:
+        if not auto_section_lunch_mode:
+            return False
+
+        section_lunch = section_lunch_by_day.get(section_key, {})
+        for day_index, period_index in block_slots:
+            lunch_period = section_lunch.get(day_index)
+            if lunch_period is not None and (period_index + 1) == lunch_period:
+                return True
+        return False
 
     def preference_hit_counts(teacher_name: str, block_slots: List[Tuple[int, int]]) -> Tuple[int, int]:
         config = normalized_preferences.get(teacher_name, {})
@@ -1741,6 +1891,7 @@ def generate_multi_section_timetable(
     best_section_tables: List[SectionTable] | None = None
     best_score = -1.0
     best_penalties: Dict[str, float] = {}
+    best_section_lunch_by_day: Dict[str, Dict[int, int]] = {}
     successful_candidates = 0
     stagnant_successes = 0
 
@@ -1776,6 +1927,9 @@ def generate_multi_section_timetable(
         teacher_daily_usage: Dict[Tuple[str, int], int] = {}
         lab_days_by_family: Dict[str, Set[int]] = {}
         candidate_preference_hits = 0
+        section_lunch_by_day = build_auto_section_lunch_breaks_by_day(rng)
+        if section_lunch_by_day is None:
+            continue
 
         shuffled_lectures = rng.sample(lecture_pool, len(lecture_pool))
         shuffled_lectures.sort(
@@ -1829,6 +1983,10 @@ def generate_multi_section_timetable(
                 lab_bundle_key = str(lecture.get("lab_bundle_key", "")).strip()
                 family_slot_marker = lab_bundle_key or f"{section_key}::SINGLE"
                 block_slots = [(day_index, start_period + offset) for offset in range(duration)]
+
+                if block_intersects_section_lunch(section_key, block_slots, section_lunch_by_day):
+                    success = False
+                    break
 
                 if any(schedule_by_section[section_key][slot] is not None for slot in block_slots):
                     success = False
@@ -1985,11 +2143,11 @@ def generate_multi_section_timetable(
             prefer_same_day_for_bundle = bundle_subject_count > int(lab_same_day_subject_threshold)
             family_lab_days = lab_days_by_family.get(bundle_section_family_key, set())
 
-            if len(bundle_members) != 3:
+            if not bundle_members:
                 success = False
                 break
 
-            if len({str(member.get("teacher", "")) for member in bundle_members}) != 3:
+            if len({str(member.get("teacher", "")) for member in bundle_members}) != len(bundle_members):
                 success = False
                 break
 
@@ -2078,6 +2236,10 @@ def generate_multi_section_timetable(
                     teacher_name = str(member["teacher"])
                     subject_name = str(member["subject"])
                     member_bundle_key = str(member.get("lab_bundle_key", "")).strip()
+
+                    if block_intersects_section_lunch(section_key, block_slots, section_lunch_by_day):
+                        bundle_conflict = True
+                        break
 
                     if any(schedule_by_section[section_key][slot] is not None for slot in block_slots):
                         bundle_conflict = True
@@ -2245,6 +2407,9 @@ def generate_multi_section_timetable(
             for day_index, start_period in candidate_starts:
                 block_slots = [(day_index, start_period + offset) for offset in range(duration)]
 
+                if block_intersects_section_lunch(section_key, block_slots, section_lunch_by_day):
+                    continue
+
                 if any(schedule_by_section[section_key][slot] is not None for slot in block_slots):
                     continue
 
@@ -2360,6 +2525,10 @@ def generate_multi_section_timetable(
             best_score = score
             best_penalties = penalties
             best_section_tables = section_tables_candidate
+            best_section_lunch_by_day = {
+                section_key: dict(day_map)
+                for section_key, day_map in section_lunch_by_day.items()
+            }
             stagnant_successes = 0
 
             if score >= 99.5:
@@ -2390,6 +2559,16 @@ def generate_multi_section_timetable(
         "attempts_budget": effective_retry_budget,
         "strategy": "best-of-randomized-candidates",
     }
+    if auto_section_lunch_mode:
+        optimization["section_lunch_breaks_by_day"] = {
+            section_key: {
+                str(day_index + 1): int(period_number)
+                for day_index, period_number in sorted(day_map.items())
+            }
+            for section_key, day_map in sorted(best_section_lunch_by_day.items())
+            if day_map
+        }
+        optimization["section_lunch_window_periods"] = list(section_lunch_candidate_periods)
 
     return day_labels, period_labels, best_section_tables, optimization
 
@@ -3328,12 +3507,12 @@ def validate_multi_section_timetable(
                 group_numbers.add(group_number)
 
             is_valid_group_lab_overlap = (
-                len(entries) == 3
+                len(entries) >= 2
                 and all(bool(cell.get("is_lab", False)) for cell in family_cells)
                 and len(bundle_keys) == 1
                 and "" not in bundle_keys
                 and has_only_group_sections
-                and group_numbers == {1, 2, 3}
+                and len(group_numbers) == len(entries)
             )
             if not is_valid_group_lab_overlap:
                 issues.append(
@@ -3413,19 +3592,21 @@ def validate_multi_section_timetable(
                 )
 
     for bundle_key, occurrences in lab_bundle_occurrences.items():
-        if len(occurrences) != 6:
-            issues.append(
-                f"Lab bundle {bundle_key} does not occupy exactly 3 grouped sections in 2 periods."
-            )
-            continue
-
         section_occurrences: Dict[str, List[Tuple[int, int, TimetableCell]]] = {}
         for section_key, day_index, period_index, cell in occurrences:
             section_occurrences.setdefault(section_key, []).append((day_index, period_index, cell))
 
-        if len(section_occurrences) != 3:
+        bundle_group_count = len(section_occurrences)
+        if bundle_group_count < 1:
             issues.append(
-                f"Lab bundle {bundle_key} does not span exactly 3 section groups."
+                f"Lab bundle {bundle_key} has no section-group assignments."
+            )
+            continue
+
+        expected_occurrence_count = bundle_group_count * 2
+        if len(occurrences) != expected_occurrence_count:
+            issues.append(
+                f"Lab bundle {bundle_key} does not occupy exactly {bundle_group_count} grouped sections in 2 periods."
             )
             continue
 
@@ -3471,24 +3652,24 @@ def validate_multi_section_timetable(
             _, group_number = _extract_section_group(str(first_cell.get("section", "")))
             if group_number is None:
                 issues.append(
-                    f"Lab bundle {bundle_key} section {section_key} is missing a G1/G2/G3 label."
+                    f"Lab bundle {bundle_key} section {section_key} is missing a subgroup label (for example -G1)."
                 )
             else:
                 group_number_set.add(group_number)
 
-        if len(teacher_set) != 3:
+        if len(teacher_set) != bundle_group_count:
             issues.append(
-                f"Lab bundle {bundle_key} must use 3 distinct faculty members."
+                f"Lab bundle {bundle_key} must use {bundle_group_count} distinct faculty members."
             )
 
-        if len(room_set) != 3:
+        if len(room_set) != bundle_group_count:
             issues.append(
-                f"Lab bundle {bundle_key} must use 3 distinct lab rooms."
+                f"Lab bundle {bundle_key} must use {bundle_group_count} distinct lab rooms."
             )
 
-        if group_number_set != {1, 2, 3}:
+        if len(group_number_set) != bundle_group_count:
             issues.append(
-                f"Lab bundle {bundle_key} must map to section groups G1, G2, and G3."
+                f"Lab bundle {bundle_key} must map to {bundle_group_count} unique section subgroup labels."
             )
 
     for index, fixed_slot in enumerate(normalized_fixed_slots, start=1):

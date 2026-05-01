@@ -75,12 +75,22 @@
                                     <div class="inline-actions">
                                         <a class="btn btn-sm btn-outline-primary" href="{{ url_for('view_timetable_version', version_id=version.id) }}">Open</a>
                                         {% if version.status == "draft" %}
-                                            <form method="post" action="{{ url_for('approve_timetable_version', version_id=version.id) }}" class="inline-form">
+                                            <form method="post" action="{{ url_for('approve_timetable_version', version_id=version.id) }}" class="inline-form version-action-form" data-action="approve">
+                                                <input type="hidden" name="approval_comment" class="action-comment-input" value="">
                                                 <button type="submit" class="btn btn-sm btn-status-approve">Approve</button>
                                             </form>
+                                            <form method="post" action="{{ url_for('reject_timetable_version', version_id=version.id) }}" class="inline-form version-action-form" data-action="reject">
+                                                <input type="hidden" name="rejection_comment" class="action-comment-input" value="">
+                                                <button type="submit" class="btn btn-sm btn-status-reject">Reject</button>
+                                            </form>
                                         {% elif version.status == "approved" %}
-                                            <form method="post" action="{{ url_for('publish_timetable_version', version_id=version.id) }}" class="inline-form">
+                                            <form method="post" action="{{ url_for('publish_timetable_version', version_id=version.id) }}" class="inline-form version-action-form" data-action="publish">
+                                                <input type="hidden" name="publish_comment" class="action-comment-input" value="">
                                                 <button type="submit" class="btn btn-sm btn-status-publish">Publish</button>
+                                            </form>
+                                            <form method="post" action="{{ url_for('reject_timetable_version', version_id=version.id) }}" class="inline-form version-action-form" data-action="reject">
+                                                <input type="hidden" name="rejection_comment" class="action-comment-input" value="">
+                                                <button type="submit" class="btn btn-sm btn-status-reject">Reject</button>
                                             </form>
                                         {% endif %}
                                     </div>
@@ -205,6 +215,32 @@
                 </div>
             </section>
         {% endif %}
-    </main>
+</main>
+    <script>
+        (function () {
+            function promptForComment(action) {
+                var title = action === 'approve' ? 'Approval comment (optional)' : action === 'reject' ? 'Rejection comment (optional)' : 'Comment (optional)';
+                try {
+                    var comment = window.prompt(title + '\n\nYou may leave this blank.');
+                    return comment === null ? null : String(comment || '');
+                } catch (e) {
+                    return '';
+                }
+            }
+
+            document.querySelectorAll('.version-action-form').forEach(function (form) {
+                form.addEventListener('submit', function (ev) {
+                    var action = form.getAttribute('data-action') || '';
+                    var comment = promptForComment(action);
+                    if (comment === null) {
+                        ev.preventDefault();
+                        return;
+                    }
+                    var input = form.querySelector('.action-comment-input');
+                    if (input) input.value = comment;
+                });
+            });
+        })();
+    </script>
 </body>
 </html>

@@ -30,12 +30,6 @@
                     {% endfor %}
                 {% endif %}
             {% endwith %}
-
-            <!-- Password Policy Requirements Info -->
-            <div class="alert alert-info" role="alert" style="font-size: 0.95rem; border-left: 4px solid var(--brand-500);">
-                <strong>Password Policy:</strong> Minimum 10 characters, no leading or trailing spaces.
-            </div>
-
             <form method="post" class="row g-3" novalidate>
                 <div class="col-12">
                     <label for="username" class="form-label form-label-strong">Username</label>
@@ -45,22 +39,16 @@
                 <div class="col-12">
                     <label for="password" class="form-label form-label-strong">Password</label>
                     <input type="password" class="form-control" id="password" name="password" required>
-                    <div class="form-text" style="margin-top: 0.5rem; color: var(--ink-700);">6+ character minimum shown here; server enforces 10+ character policy.</div>
+                    <div class="form-text" style="margin-top: 0.5rem; color: var(--ink-700);"></div>
                 </div>
 
                 <div class="col-12 d-flex flex-wrap gap-3 align-items-center">
                     <button type="submit" class="btn btn-generate">Sign In</button>
                 </div>
-                <div class="col-12">
-                    <div class="alert alert-warning" role="alert" style="font-size: 0.9rem; margin: 0;">
-                        <small><strong>Demo Account:</strong> Default admin credentials below. Change password on first login.</small><br>
-                        <small><strong>Username:</strong> admin | <strong>Password:</strong> admin123</small>
-                    </div>
-                </div>
             </form>
             <div class="col-12" style="margin-top: 1.5rem;">
                 <details class="form-text" style="cursor: pointer;">
-                    <summary style="color: var(--brand-500); font-weight: 600;">Security & Rate Limiting</summary>
+                    <summary style="color: var(--brand-500); font-weight: 600;"></summary>
                     <div style="margin-top: 0.75rem; padding: 0.75rem; background: var(--surface-muted); border-radius: 6px; font-size: 0.9rem;">
                         <p style="margin: 0.5rem 0;"><strong>Rate Limiting:</strong> Account locks after 5 failed login attempts for 10 minutes.</p>
                         <p style="margin: 0.5rem 0;"><strong>Same-Origin Protection:</strong> Cross-origin login attempts are blocked.</p>

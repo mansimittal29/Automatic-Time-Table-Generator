@@ -47,7 +47,6 @@
             <article class="metric-card"><div class="metric-label">Rooms</div><div class="metric-value">{{ stats.rooms }}</div></article>
             <article class="metric-card"><div class="metric-label">Sections</div><div class="metric-value">{{ stats.sections }}</div></article>
             <article class="metric-card"><div class="metric-label">Subjects</div><div class="metric-value">{{ stats.subjects }}</div></article>
-            <article class="metric-card"><div class="metric-label">Assignments</div><div class="metric-value">{{ stats.assignments_master }}</div></article>
         </section>
         {% endif %}
 
@@ -108,15 +107,11 @@
             <h2 class="mini-title mb-3">Quick Actions</h2>
             <div class="d-flex flex-wrap gap-2">
                 <a class="btn btn-outline-dark" href="{{ url_for('view_published_timetable') }}">View Published Timetable</a>
-                {% if next_scheduled_version %}
-                    <a class="btn btn-outline-dark" href="{{ url_for('view_upcoming_timetable') }}">View Upcoming Timetable</a>
-                {% endif %}
                 {% if latest_published_version %}
                     <a class="btn btn-outline-dark" href="{{ url_for('export_timetable_pdf') }}">Export Published PDF</a>
                 {% endif %}
                 {% if role_code in ['ADMIN', 'HOD'] %}
                     <a class="btn btn-generate" href="{{ url_for('index') }}">Generate Timetable</a>
-                    <a class="btn btn-outline-dark" href="{{ url_for('demo_timetable') }}">Generate with Benchmark Data</a>
                     <a class="btn btn-outline-dark" href="{{ url_for('list_timetable_versions') }}">Compare Versions</a>
                     <a class="btn btn-outline-dark" href="{{ url_for('manage_assignments_master') }}">Assignment Master</a>
                     <a class="btn btn-outline-dark" href="{{ url_for('view_audit_logs') }}">Audit Trail</a>

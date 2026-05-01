@@ -251,169 +251,6 @@ def prune_login_rate_limit_buckets(now_epoch: float) -> None:
         _LOGIN_RATE_LIMIT_BUCKETS.pop(bucket_key, None)
 
 
-def get_login_retry_after_seconds(keys: List[str], now_epoch: float) -> int:
-    retry_after = 0
-    for key in keys:
-        bucket_state = _LOGIN_RATE_LIMIT_BUCKETS.get(key)
-        if bucket_state is None:
-            continue
-
-        locked_until = bucket_state.get("locked_until", 0.0)
-        if locked_until > now_epoch:
-            retry_after = max(retry_after, int(locked_until - now_epoch))
-
-    return retry_after
-
-
-def record_login_failure(keys: List[str], now_epoch: float) -> None:
-    for key in keys:
-        bucket_state = _LOGIN_RATE_LIMIT_BUCKETS.get(key)
-        if bucket_state is None:
-            bucket_state = {
-                "count": 0.0,
-                "first_failure": now_epoch,
-                "last_seen": now_epoch,
-                "locked_until": 0.0,
-            }
-            _LOGIN_RATE_LIMIT_BUCKETS[key] = bucket_state
-
-        if now_epoch - bucket_state.get("first_failure", now_epoch) > LOGIN_RATE_LIMIT_WINDOW_SECONDS:
-            bucket_state["count"] = 0.0
-            bucket_state["first_failure"] = now_epoch
-
-        bucket_state["count"] = bucket_state.get("count", 0.0) + 1.0
-        bucket_state["last_seen"] = now_epoch
-
-        if int(bucket_state["count"]) >= LOGIN_RATE_LIMIT_MAX_FAILURES:
-            bucket_state["locked_until"] = now_epoch + LOGIN_RATE_LIMIT_LOCK_SECONDS
-
-
-def clear_login_failures(keys: List[str]) -> None:
-    for key in keys:
-        _LOGIN_RATE_LIMIT_BUCKETS.pop(key, None)
-
-
-def validate_password_policy(password: str) -> str | None:
-    if len(password) < MIN_PASSWORD_LENGTH:
-        return f"Password must be at least {MIN_PASSWORD_LENGTH} characters."
-    if password.strip() != password:
-        return "Password cannot start or end with spaces."
-    return None
-
-
-def request_origin_is_trusted() -> bool:
-    trusted_origins = {request.host_url.rstrip("/")}
-    configured_origins = os.environ.get("TIMETABLE_TRUSTED_ORIGINS", "")
-    for raw_origin in configured_origins.split(","):
-        cleaned_origin = raw_origin.strip().rstrip("/")
-        if cleaned_origin:
-            trusted_origins.add(cleaned_origin)
-
-    origin_header = request.headers.get("Origin", "").strip().rstrip("/")
-    if origin_header:
-        return origin_header in trusted_origins
-
-    referer_header = request.headers.get("Referer", "").strip()
-    if not referer_header:
-        return True
-
-    parsed_referer = urlparse(referer_header)
-    referer_origin = f"{parsed_referer.scheme}://{parsed_referer.netloc}".rstrip("/")
-    return referer_origin in trusted_origins
-
-
-@app.before_request
-def enforce_same_origin_for_state_changes():
-    if request.method in {"GET", "HEAD", "OPTIONS", "TRACE"}:
-        return
-    if request.endpoint == "static":
-        return
-    if request_origin_is_trusted():
-        return
-
-    return Response("Blocked cross-origin request.", status=403)
-
-
-@app.after_request
-def attach_security_headers(response: Response) -> Response:
-    response.headers.setdefault("X-Content-Type-Options", "nosniff")
-    response.headers.setdefault("X-Frame-Options", "SAMEORIGIN")
-    response.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
-    response.headers.setdefault("Cross-Origin-Opener-Policy", "same-origin")
-    return response
-
-
-@app.before_request
-def enforce_password_change():
-    if not current_user.is_authenticated:
-        return
-    if getattr(current_user, "must_change_password", False):
-        allowed_endpoints = {"change_password", "logout", "static"}
-        if request.endpoint not in allowed_endpoints:
-            flash("You must change your password before continuing.", "warning")
-            return redirect(url_for("change_password"))
-
-
-def log_audit_event(
-    action: str,
-    target_type: str,
-    target_id: str,
-    details: Dict[str, object] | None = None,
-) -> None:
-    actor_id = current_user.id if current_user.is_authenticated else None
-    actor_role_code = get_current_role_code() or "SYSTEM"
-    audit_entry = AuditLog(
-        actor_user_id=actor_id,
-        actor_role_code=actor_role_code,
-        action=action,
-        target_type=target_type,
-        target_id=str(target_id),
-        details_json=json.dumps(details or {}),
-    )
-    db.session.add(audit_entry)
-
-
-def list_active_user_emails() -> List[str]:
-    emails = (
-        User.query.filter(User.is_active.is_(True), User.email.isnot(None))
-        .order_by(User.id.asc())
-        .all()
-    )
-    return [str(user.email).strip() for user in emails if str(user.email or "").strip()]
-
-
-def send_email_alert(subject: str, body: str, recipients: List[str]) -> Tuple[bool, str]:
-    if not recipients:
-        return False, "No recipients configured."
-
-    smtp_host = os.environ.get("TIMETABLE_SMTP_HOST", "").strip()
-    smtp_user = os.environ.get("TIMETABLE_SMTP_USERNAME", "").strip()
-    smtp_password = os.environ.get("TIMETABLE_SMTP_PASSWORD", "")
-    smtp_sender = os.environ.get("TIMETABLE_SMTP_SENDER", "").strip()
-    smtp_port_raw = os.environ.get("TIMETABLE_SMTP_PORT", "587").strip() or "587"
-    smtp_tls = os.environ.get("TIMETABLE_SMTP_USE_TLS", "1").strip() not in {"0", "false", "False"}
-
-    if not smtp_host or not smtp_sender:
-        return False, "SMTP host or sender is not configured."
-
-    try:
-        smtp_port = int(smtp_port_raw)
-    except ValueError:
-        smtp_port = 587
-
-    message = EmailMessage()
-    message["Subject"] = subject
-    message["From"] = smtp_sender
-    message["To"] = ", ".join(recipients)
-    message.set_content(body)
-
-    try:
-        with smtplib.SMTP(smtp_host, smtp_port, timeout=15) as smtp_client:
-            if smtp_tls:
-                smtp_client.starttls()
-            if smtp_user and smtp_password:
-                smtp_client.login(smtp_user, smtp_password)
-            smtp_client.send_message(message)
     except Exception as error:
         return False, str(error)
 
@@ -421,125 +258,6 @@ def send_email_alert(subject: str, body: str, recipients: List[str]) -> Tuple[bo
 
 
 def format_effective_timestamp(value: datetime | None) -> str:
-    if value is None:
-        return "Immediate"
-    return value.strftime("%Y-%m-%d %H:%M UTC")
-
-
-def select_previous_version(version: TimetableVersion) -> TimetableVersion | None:
-    return (
-        TimetableVersion.query.filter(TimetableVersion.id < version.id)
-        .order_by(TimetableVersion.id.desc())
-        .first()
-    )
-
-
-def build_change_summary(version: TimetableVersion) -> str:
-    current_payload = version.summary()
-    previous_version = select_previous_version(version)
-    if previous_version is None:
-        return "First version in history; no previous snapshot to compare."
-
-    previous_payload = previous_version.summary()
-    if not isinstance(current_payload.get("section_tables"), list) or not isinstance(previous_payload.get("section_tables"), list):
-        return "Previous or current payload is not comparable."
-
-    compare_result = compare_version_payloads(previous_payload, current_payload)
-    top_sections = compare_result.get("top_section_changes", [])
-    top_section_parts: List[str] = []
-    for section_key, count in top_sections[:3]:
-        top_section_parts.append(f"{section_key} ({count})")
-
-    top_sections_text = ", ".join(top_section_parts) if top_section_parts else "No section-level changes"
-    return (
-        f"Changed={compare_result.get('changed_count', 0)}, "
-        f"Added={compare_result.get('added_count', 0)}, "
-        f"Removed={compare_result.get('removed_count', 0)}, "
-        f"ComparedSlots={compare_result.get('total_compared_slots', 0)}; "
-        f"TopSections={top_sections_text}"
-    )
-
-
-def build_version_email_body(version: TimetableVersion, event_name: str, comment: str, change_summary: str) -> str:
-    lines = [
-        f"Timetable Version Notification: {event_name}",
-        "",
-        f"Version: {version.version_label}",
-        f"Status: {version.status.upper()}",
-        f"Effective From: {format_effective_timestamp(version.effective_from)}",
-        f"Changed By: {current_user.full_name if current_user.is_authenticated else 'System'}",
-        "",
-        "Change Summary:",
-        change_summary,
-    ]
-
-    cleaned_comment = comment.strip()
-    if cleaned_comment:
-        lines.extend(["", "Comment:", cleaned_comment])
-
-    lines.extend([
-        "",
-        f"Timestamp: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}",
-    ])
-    return "\n".join(lines)
-
-
-def notify_users_for_version_event(version: TimetableVersion, event_name: str, comment: str = "") -> Tuple[bool, str]:
-    recipients = list_active_user_emails()
-    change_summary = build_change_summary(version)
-    version.notification_summary = change_summary
-
-    subject = f"[Timetable] {event_name}: {version.version_label}"
-    body = build_version_email_body(version, event_name, comment, change_summary)
-    sent, status_message = send_email_alert(subject, body, recipients)
-    return sent, status_message
-
-
-def publish_version_outputs(version: TimetableVersion) -> Tuple[bool, str]:
-    payload = version.summary()
-    section_tables = payload.get("section_tables", [])
-    days = payload.get("days", [])
-    periods = payload.get("periods", [])
-    summary_raw = payload.get("summary", {})
-
-    if not section_tables or not days or not periods:
-        return False, "Published payload is incomplete."
-
-    summary = summary_raw if isinstance(summary_raw, dict) else {}
-    lunch_break_periods_by_day: Dict[int, List[int]] = {
-        day_index: []
-        for day_index in range(len(days))
-    }
-    lunch_by_day = summary.get("lunch_break_periods_by_day", {})
-    if isinstance(lunch_by_day, dict):
-        for day_key, raw_values in lunch_by_day.items():
-            try:
-                day_index = int(day_key)
-            except (TypeError, ValueError):
-                continue
-
-            if day_index < 0 or day_index >= len(days):
-                continue
-
-            if isinstance(raw_values, int):
-                candidate_values = [raw_values]
-            elif isinstance(raw_values, (list, tuple, set)):
-                candidate_values = list(raw_values)
-            else:
-                candidate_values = []
-
-            normalized_values: List[int] = []
-            for raw_period in candidate_values:
-                try:
-                    parsed_period = int(raw_period)
-                except (TypeError, ValueError):
-                    continue
-                if 1 <= parsed_period <= len(periods):
-                    normalized_values.append(parsed_period)
-
-            lunch_break_periods_by_day[day_index] = sorted(set(normalized_values))
-
-    room_names: Set[str] = set()
     room_stats = summary.get("room_stats", {})
     if isinstance(room_stats, dict):
         room_names.update(str(room_name) for room_name in room_stats.keys() if str(room_name).strip())
@@ -822,152 +540,6 @@ def format_lunch_break_description(
         return "None"
 
     return ", ".join(parts)
-
-
-def build_feasible_lunch_pattern(working_days: int, periods_per_day: int) -> str:
-    baseline_period = 5 if periods_per_day >= 5 else periods_per_day
-    alternate_period = 6 if periods_per_day >= 6 else baseline_period
-    values = [str(max(1, baseline_period)) for _ in range(max(1, working_days))]
-    values[-1] = str(max(1, alternate_period))
-    return ",".join(values)
-
-
-def build_feasible_sample_form_values() -> Dict[str, str]:
-    sample_values = load_default_form_values()
-
-    try:
-        working_days = parse_integer_field(sample_values.get("working_days", "5"), "Working days", 1, 7)
-    except ValueError:
-        working_days = 5
-
-    try:
-        periods_per_day = parse_integer_field(
-            sample_values.get("periods_per_day", str(DEFAULT_PERIODS_PER_DAY)),
-            "Periods per day",
-            1,
-            MAX_PERIODS_PER_DAY,
-        )
-    except ValueError:
-        periods_per_day = DEFAULT_PERIODS_PER_DAY
-
-    sample_values["working_days"] = str(working_days)
-    sample_values["periods_per_day"] = str(periods_per_day)
-    sample_values["lunch_break_periods"] = build_feasible_lunch_pattern(working_days, periods_per_day)
-    sample_values["lab_same_day_subject_threshold"] = "3"
-    sample_values["assignment_source"] = "manual"
-    sample_values["assignment_master_count"] = str(AssignmentMaster.query.count())
-
-    return sample_values
-
-
-def build_large_demo_sample_form_values() -> Dict[str, str]:
-    sample_values = load_default_form_values()
-
-    # Feasible benchmark profile: medium-large with shared faculty to stress constraints
-    # while still leaving enough free slots for practical generation.
-    working_days = 6
-    periods_per_day = 8
-
-    class_definitions = [
-        (f"Class-{class_number:02d}", f"Year-{((class_number - 1) % 4) + 1}")
-        for class_number in range(1, 13)
-    ]
-    section_codes = ["A", "B"]
-
-    theory_subjects = [
-        "Mathematics",
-        "Programming Fundamentals",
-        "Data Structures",
-        "Database Systems",
-        "Operating Systems",
-    ]
-    lab_subjects = [
-        (
-            "Programming Lab",
-            "|".join(f"LAB-{room_number:02d}" for room_number in range(1, 13)),
-        ),
-        (
-            "Database Lab",
-            "|".join(f"LAB-{room_number:02d}" for room_number in range(13, 25)),
-        ),
-    ]
-
-    room_lines = [f"CR-{room_number:03d}" for room_number in range(101, 141)]
-    room_lines.extend([f"LAB-{room_number:02d}" for room_number in range(1, 25)])
-
-    def faculty_name(faculty_number: int) -> str:
-        return f"Faculty-{faculty_number:03d}"
-
-    next_faculty_number = 1
-
-    theory_faculty_map: Dict[Tuple[str, str], List[str]] = {}
-    lab_faculty_map: Dict[Tuple[str, str], List[str]] = {}
-
-    for year_number in range(1, 5):
-        year_key = f"Year-{year_number}"
-
-        for subject_name in theory_subjects:
-            faculty_pool: List[str] = []
-            for _ in range(4):
-                faculty_pool.append(faculty_name(next_faculty_number))
-                next_faculty_number += 1
-            theory_faculty_map[(year_key, subject_name)] = faculty_pool
-
-        for subject_name, _ in lab_subjects:
-            faculty_pool = []
-            for _ in range(3):
-                faculty_pool.append(faculty_name(next_faculty_number))
-                next_faculty_number += 1
-            lab_faculty_map[(year_key, subject_name)] = faculty_pool
-
-    faculty_names_used: Set[str] = set()
-
-    section_home_room_lines: List[str] = []
-    assignment_lines: List[str] = []
-    classroom_number = 101
-
-    for class_index, (class_name, standard) in enumerate(class_definitions):
-        for section_offset, section_code in enumerate(section_codes):
-            home_room = f"CR-{classroom_number:03d}"
-            classroom_number += 1
-
-            section_home_room_lines.append(
-                f"{class_name},{standard},{section_code},{home_room}"
-            )
-
-            for subject_index, subject_name in enumerate(theory_subjects):
-                teacher_pool = theory_faculty_map[(standard, subject_name)]
-                teacher_name = teacher_pool[(class_index + section_offset + subject_index) % len(teacher_pool)]
-                faculty_names_used.add(teacher_name)
-
-                assignment_lines.append(
-                    f"{class_name},{standard},{section_code},{subject_name},{teacher_name},4,THEORY,,2"
-                )
-
-            for subject_index, (subject_name, allowed_rooms) in enumerate(lab_subjects):
-                teacher_pool = lab_faculty_map[(standard, subject_name)]
-                teacher_name = teacher_pool[(class_index + section_offset + subject_index) % len(teacher_pool)]
-                faculty_names_used.add(teacher_name)
-
-                assignment_lines.append(
-                    f"{class_name},{standard},{section_code},{subject_name},{teacher_name},2,LAB,{allowed_rooms},2"
-                )
-
-    sample_values["working_days"] = str(working_days)
-    sample_values["periods_per_day"] = str(periods_per_day)
-    sample_values["lunch_break_periods"] = build_feasible_lunch_pattern(working_days, periods_per_day)
-    sample_values["lab_same_day_subject_threshold"] = "3"
-    sample_values["faculty_daily_max_periods"] = "5"
-    sample_values["rooms"] = "\n".join(room_lines)
-    sample_values["assignments"] = "\n".join(assignment_lines)
-    sample_values["section_classrooms"] = "\n".join(section_home_room_lines)
-    sample_values["faculty_daily_limits"] = "\n".join(
-        f"{teacher_name},5" for teacher_name in sorted(faculty_names_used)
-    )
-    sample_values["assignment_source"] = "manual"
-    sample_values["assignment_master_count"] = str(AssignmentMaster.query.count())
-
-    return sample_values
 
 
 def estimate_assignment_text_stats(assignments_text: str) -> Dict[str, int]:
@@ -1325,6 +897,119 @@ def load_default_form_values() -> Dict[str, str]:
     return defaults
 
 
+def build_benchmark_lunch_pattern(working_days: int, periods_per_day: int) -> str:
+    values: List[str] = []
+    for day_index in range(max(1, working_days)):
+        if periods_per_day >= 6:
+            lunch_period = 5 if day_index % 2 == 0 else 6
+        else:
+            lunch_period = min(5, max(1, periods_per_day))
+        values.append(str(lunch_period))
+    return ",".join(values)
+
+
+def build_large_demo_sample_form_values() -> Dict[str, str]:
+    sample_values = load_default_form_values()
+
+    working_days = 6
+    periods_per_day = 10
+    faculty_daily_max_periods = 6
+    lab_same_day_subject_threshold = 3
+
+    class_definitions = [
+        (f"Class-{class_number:02d}", f"Year-{((class_number - 1) % 4) + 1}")
+        for class_number in range(1, 7)
+    ]
+    section_codes = ["A", "B", "C", "D"]
+
+    theory_subjects = [
+        "Mathematics",
+        "Programming Fundamentals",
+        "Data Structures",
+        "Database Systems",
+        "Operating Systems",
+    ]
+    theory_subject_codes = {
+        "Mathematics": "MATH",
+        "Programming Fundamentals": "PROG",
+        "Data Structures": "DSTR",
+        "Database Systems": "DBMS",
+        "Operating Systems": "OSYS",
+    }
+    lab_subjects = [
+        ("Programming Lab", "LAB-01|LAB-02|LAB-03"),
+        ("Electronics Lab", "LAB-04|LAB-05|LAB-06"),
+        ("Data Analytics Lab", "LAB-07|LAB-08|LAB-09"),
+    ]
+    lab_subject_codes = {
+        "Programming Lab": "PLAB",
+        "Electronics Lab": "ELAB",
+        "Data Analytics Lab": "DLAB",
+    }
+
+    room_lines = [f"CR-{room_number:03d}" for room_number in range(101, 125)]
+    room_lines.extend([f"LAB-{room_number:02d}" for room_number in range(1, 13)])
+
+    def make_faculty_name(prefix: str, index: int) -> str:
+        return f"{prefix}-{index:02d}"
+
+    theory_faculty_map: Dict[Tuple[str, str], List[str]] = {}
+    lab_faculty_map: Dict[str, List[str]] = {}
+
+    for year_number in range(1, 5):
+        year_key = f"Year-{year_number}"
+        for subject_name in theory_subjects:
+            faculty_pool = [make_faculty_name(f"Y{year_number}-{theory_subject_codes[subject_name]}", index) for index in range(1, 5)]
+            theory_faculty_map[(year_key, subject_name)] = faculty_pool
+
+    for subject_name, _ in lab_subjects:
+        prefix = lab_subject_codes[subject_name]
+        lab_faculty_map[subject_name] = [make_faculty_name(f"LAB-{prefix}", index) for index in range(1, 5)]
+
+    assignment_lines: List[str] = []
+    section_home_room_lines: List[str] = []
+    faculty_names_used: Set[str] = set()
+
+    classroom_number = 101
+    for class_index, (class_name, standard) in enumerate(class_definitions):
+        for section_index, section_code in enumerate(section_codes):
+            home_room = f"CR-{classroom_number:03d}"
+            classroom_number += 1
+            section_home_room_lines.append(f"{class_name},{standard},{section_code},{home_room}")
+
+            for subject_index, subject_name in enumerate(theory_subjects):
+                teacher_pool = theory_faculty_map[(standard, subject_name)]
+                teacher_name = teacher_pool[(class_index + section_index + subject_index) % len(teacher_pool)]
+                faculty_names_used.add(teacher_name)
+                assignment_lines.append(
+                    f"{class_name},{standard},{section_code},{subject_name},{teacher_name},4,THEORY,,2"
+                )
+
+            for subject_index, (subject_name, allowed_rooms) in enumerate(lab_subjects):
+                teacher_pool = lab_faculty_map[subject_name]
+                teacher_name = teacher_pool[(class_index + section_index + subject_index) % len(teacher_pool)]
+                faculty_names_used.add(teacher_name)
+                assignment_lines.append(
+                    f"{class_name},{standard},{section_code},{subject_name},{teacher_name},2,LAB,{allowed_rooms},2"
+                )
+
+    sample_values["working_days"] = str(working_days)
+    sample_values["periods_per_day"] = str(periods_per_day)
+    sample_values["lunch_break_periods"] = build_benchmark_lunch_pattern(working_days, periods_per_day)
+    sample_values["faculty_daily_max_periods"] = str(faculty_daily_max_periods)
+    sample_values["faculty_daily_free_period"] = "1"
+    sample_values["lab_same_day_subject_threshold"] = str(lab_same_day_subject_threshold)
+    sample_values["scenario_runs"] = "3"
+    sample_values["rooms"] = "\n".join(room_lines)
+    sample_values["assignments"] = "\n".join(assignment_lines)
+    sample_values["section_classrooms"] = "\n".join(section_home_room_lines)
+    sample_values["faculty_daily_limits"] = "\n".join(f"{teacher_name},6" for teacher_name in sorted(faculty_names_used))
+    sample_values["assignment_source"] = "manual"
+    sample_values["assignment_master_count"] = str(AssignmentMaster.query.count())
+
+    return sample_values
+
+
 def build_assignment_payload(assignments_text: str) -> List[Dict[str, object]]:
     lines = split_non_empty_lines(assignments_text)
     if not lines:
@@ -1338,6 +1023,7 @@ def build_assignment_payload(assignments_text: str) -> List[Dict[str, object]]:
     lab_sessions_by_section: Dict[str, int] = {}
     lab_teachers_by_section: Dict[str, Set[str]] = {}
     lab_allowed_rooms_by_section: Dict[str, Set[str]] = {}
+    lab_subjects_by_section: Dict[str, Set[str]] = {}
 
     for index, row in enumerate(reader, start=1):
         if len(row) not in (6, 7, 8, 9):
@@ -1399,6 +1085,7 @@ def build_assignment_payload(assignments_text: str) -> List[Dict[str, object]]:
             lab_sessions_by_section[section_key] = lab_sessions_by_section.get(section_key, 0) + (lecture_count // 2)
             lab_teachers_by_section.setdefault(section_key, set()).add(teacher)
             lab_allowed_rooms_by_section.setdefault(section_key, set()).update(allowed_rooms)
+            lab_subjects_by_section.setdefault(section_key, set()).add(subject)
 
         payload.append(
             {
@@ -1415,26 +1102,20 @@ def build_assignment_payload(assignments_text: str) -> List[Dict[str, object]]:
         )
 
     for section_key in sorted(lab_sessions_by_section.keys()):
-        session_count = lab_sessions_by_section[section_key]
-        if session_count % 3 != 0:
-            raise ValueError(
-                f"{section_key} has {session_count} LAB sessions. "
-                "LAB auto-splitting requires each section to have LAB sessions in multiples of 3 "
-                "so G1/G2/G3 can run in the same slot."
-            )
-
+        lab_subject_count = len(lab_subjects_by_section.get(section_key, set()))
+        required_distinct_count = max(1, min(3, lab_subject_count))
         distinct_teacher_count = len(lab_teachers_by_section.get(section_key, set()))
-        if distinct_teacher_count < 3:
+        if distinct_teacher_count < required_distinct_count:
             raise ValueError(
                 f"{section_key} has only {distinct_teacher_count} distinct LAB faculty. "
-                "Provide at least 3 distinct faculty so G1/G2/G3 can run simultaneously without faculty conflicts."
+                f"Provide at least {required_distinct_count} distinct faculty for LAB synchronization without faculty conflicts."
             )
 
         distinct_room_count = len(lab_allowed_rooms_by_section.get(section_key, set()))
-        if distinct_room_count < 3:
+        if distinct_room_count < required_distinct_count:
             raise ValueError(
                 f"{section_key} has only {distinct_room_count} distinct allowed LAB rooms. "
-                "Provide at least 3 allowed rooms so G1/G2/G3 can be assigned different rooms in the same slot."
+                f"Provide at least {required_distinct_count} allowed LAB rooms so synchronized LAB groups can be assigned different rooms in the same slot."
             )
 
     return payload
@@ -1507,6 +1188,36 @@ def parse_faculty_daily_limits(
         limits[teacher] = max_periods
 
     return limits
+
+
+def validate_lab_allowed_rooms_against_rooms(
+    assignment_payload: List[Dict[str, object]],
+    rooms: List[str],
+) -> None:
+    room_set = {room.strip() for room in rooms if room.strip()}
+    missing_rows: List[str] = []
+
+    for assignment in assignment_payload:
+        if not bool(assignment.get("is_lab", False)):
+            continue
+
+        allowed_rooms = [str(room).strip() for room in assignment.get("allowed_rooms", []) if str(room).strip()]
+        if not allowed_rooms:
+            continue
+
+        if any(room_name in room_set for room_name in allowed_rooms):
+            continue
+
+        missing_rows.append(
+            f"{assignment.get('class_name', '')},{assignment.get('standard', '')},{assignment.get('section', '')},{assignment.get('subject', '')}"
+        )
+
+    if missing_rows:
+        preview = "; ".join(missing_rows[:3])
+        raise ValueError(
+            "LAB room mismatch: some LAB rows use AllowedRooms not present in Rooms list. "
+            f"Examples: {preview}. Add matching LAB-* rooms to Rooms, or update AllowedRooms."
+        )
 
 
 def write_generated_output_files(
@@ -3932,6 +3643,7 @@ def index() -> str:
                 form_values["faculty_daily_limits"],
                 max_teaching_periods_per_day,
             )
+            validate_lab_allowed_rooms_against_rooms(assignment_payload, rooms)
 
             scenario_results: List[Dict[str, object]] = []
             days: List[str]
@@ -4144,126 +3856,6 @@ def index() -> str:
         default_periods_per_day=DEFAULT_PERIODS_PER_DAY,
         max_periods_per_day=MAX_PERIODS_PER_DAY,
     )
-
-
-@app.route("/demo")
-@roles_required("ADMIN", "HOD")
-def demo_timetable() -> str:
-    role_code = get_current_role_code()
-    defaults = build_large_demo_sample_form_values()
-
-    try:
-        working_days = parse_integer_field(defaults["working_days"], "Working days", 1, 7)
-        periods_per_day = parse_integer_field(
-            defaults.get("periods_per_day", str(DEFAULT_PERIODS_PER_DAY)),
-            "Periods per day",
-            1,
-            MAX_PERIODS_PER_DAY,
-        )
-
-        lunch_break_periods_by_day = parse_lunch_break_periods(
-            defaults.get("lunch_break_periods", ""),
-            periods_per_day,
-            working_days,
-        )
-
-        max_teaching_periods_per_day = min_teaching_periods_per_day(
-            periods_per_day,
-            lunch_break_periods_by_day,
-            working_days,
-        )
-        if max_teaching_periods_per_day <= 0:
-            raise ValueError("Lunch break periods cannot cover all periods in demo data.")
-
-        faculty_daily_default_max = parse_integer_field(
-            defaults.get("faculty_daily_max_periods", "4"),
-            "Faculty daily max periods",
-            1,
-            max_teaching_periods_per_day,
-        )
-        lab_same_day_subject_threshold = parse_integer_field(
-            defaults.get("lab_same_day_subject_threshold", "3"),
-            "LAB same-day threshold",
-            1,
-            20,
-        )
-
-        rooms = split_non_empty_lines(defaults.get("rooms", ""))
-        if not rooms:
-            raise ValueError("No rooms configured in default data for demo.")
-
-        assignment_payload, _, resolved_assignment_source = resolve_assignment_payload(
-            defaults.get("assignments", ""),
-            defaults.get("assignment_source", "manual"),
-        )
-        section_home_rooms = parse_section_classrooms(defaults.get("section_classrooms", ""), rooms)
-        faculty_daily_limits = parse_faculty_daily_limits(
-            defaults.get("faculty_daily_limits", ""),
-            max_teaching_periods_per_day,
-        )
-
-        days, periods, section_tables, class_tables, faculty_tables, room_tables, summary, validation_issues = generate_outputs(
-            assignment_payload=assignment_payload,
-            rooms=rooms,
-            working_days=working_days,
-            periods_per_day=periods_per_day,
-            lunch_break_periods_by_day=lunch_break_periods_by_day,
-            section_home_rooms=section_home_rooms,
-            faculty_daily_default_max=faculty_daily_default_max,
-            faculty_daily_limits=faculty_daily_limits,
-            lab_same_day_subject_threshold=lab_same_day_subject_threshold,
-            random_seed=None,
-        )
-
-        for issue in validation_issues:
-            flash(issue, "warning")
-
-        lunch_break_description = format_lunch_break_description(days, lunch_break_periods_by_day)
-
-        flash("Demo timetable generated successfully using the large dataset sample.", "success")
-        return render_template(
-            "timetable.html",
-            days=days,
-            periods=periods,
-            section_tables=section_tables,
-            class_tables=class_tables,
-            faculty_tables=faculty_tables,
-            room_tables=room_tables,
-            export_options=build_export_options(section_tables, class_tables, faculty_tables, room_tables),
-            periods_per_day=periods_per_day,
-            lunch_break_periods_by_day={
-                day_index: sorted(periods_set)
-                for day_index, periods_set in lunch_break_periods_by_day.items()
-            },
-            lunch_break_description=lunch_break_description,
-            summary=summary,
-            constraint_settings={
-                "faculty_daily_default_max": faculty_daily_default_max,
-                "faculty_daily_limits": faculty_daily_limits,
-                "assignment_source": resolved_assignment_source,
-                "lab_same_day_subject_threshold": lab_same_day_subject_threshold,
-            },
-            role_code=role_code,
-            latest_version=None,
-            view_mode="generated",
-            validation_issues=validation_issues,
-            edit_locked=False,
-        )
-    except ValueError as error:
-        flash(str(error), "danger")
-        return redirect(url_for("index"))
-
-
-@app.get("/api/form/feasible-sample")
-@roles_required("ADMIN", "HOD")
-def feasible_sample_form_api():
-    return jsonify({"form_values": build_feasible_sample_form_values()})
-
-
-@app.get("/api/form/large-demo-sample")
-@roles_required("ADMIN", "HOD")
-def large_demo_sample_form_api():
-    return jsonify({"form_values": build_large_demo_sample_form_values()})
 
 
 @app.get("/timetable/export/pdf")

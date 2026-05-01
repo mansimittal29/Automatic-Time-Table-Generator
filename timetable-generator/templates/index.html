@@ -28,16 +28,6 @@
                 <a class="btn btn-outline-light btn-sm" href="{{ url_for('logout') }}">Sign Out</a>
             </div>
 
-            <div class="portal-identity">
-                <div class="portal-identity-item">
-                    <div class="portal-identity-label">Assignment Source</div>
-                    <div class="portal-identity-value">{{ form_values.assignment_source|upper }}</div>
-                </div>
-                <div class="portal-identity-item">
-                    <div class="portal-identity-label">Master Assignments</div>
-                    <div class="portal-identity-value">{{ form_values.assignment_master_count }}</div>
-                </div>
-            </div>
         </section>
 
         <section class="card-surface p-4 p-lg-5 mt-4">
@@ -71,7 +61,7 @@
                 </div>
 
                 <div class="col-md-2">
-                    <label for="periods_per_day" class="form-label form-label-strong">Periods / Day</label>
+                    <label for="periods_per_day" class="form-label form-label-strong">Periods per Day</label>
                     <input
                         type="number"
                         class="form-control"
@@ -84,18 +74,6 @@
                     >
                 </div>
 
-                <div class="col-md-3">
-                    <label for="lunch_break_periods" class="form-label form-label-strong">Lunch Break Periods</label>
-                    <input
-                        type="text"
-                        class="form-control"
-                        id="lunch_break_periods"
-                        name="lunch_break_periods"
-                        value="{{ form_values.lunch_break_periods }}"
-                        placeholder="Examples: 5 or 5,5,5,5,5"
-                    >
-                    <div class="field-hint">Use one value for all days, or one value per day in order (Mon..Sun).</div>
-                </div>
 
                 <div class="col-md-3">
                     <label for="faculty_daily_max_periods" class="form-label form-label-strong">Faculty Daily Max</label>
@@ -117,13 +95,12 @@
                         class="form-control"
                         id="rooms"
                         name="rooms"
-                        rows="12"
+                        rows="20"
                         placeholder="One room per line"
                         required
                     >{{ form_values.rooms }}</textarea>
                     <div class="field-hint">Include normal rooms and lab rooms.</div>
                     <div class="counter" id="rooms-count"></div>
-                    <div class="counter" id="capacity-info"></div>
                 </div>
 
                 <div class="col-lg-8">
@@ -159,19 +136,13 @@
                         class="form-control"
                         id="assignments"
                         name="assignments"
-                        rows="12"
+                        rows="20"
                         placeholder="Class-01,Year-1,A,Mathematics,Faculty-01,4,THEORY,,2&#10;Class-01,Year-1,A,Programming Lab,Faculty-51,2,LAB,LAB-01|LAB-02|LAB-03,2"
                         spellcheck="false"
                     >{{ form_values.assignments }}</textarea>
-                    <div class="field-hint" id="assignment-source-hint">Enter one subject per line in CSV format: Class,Standard,Section,Subject,Teacher,Lectures[,Type[,AllowedRooms[,DailyMax]]]</div>
+                    <div class="field-hint" id="assignment-source-hint">Enter one subject per line in format: Class,Standard,Section,Subject,Teacher,Lectures[,Type[,AllowedRooms[,DailyMax]]]</div>
                     <div class="field-hint">Example THEORY row: Class-01,Year-1,A,Mathematics,Faculty-01,4,THEORY,,2</div>
                     <div class="field-hint">Example LAB row: Class-01,Year-1,A,Programming Lab,Faculty-51,2,LAB,LAB-01|LAB-02|LAB-03,2</div>
-                    <div class="field-hint">LAB guidance: enter base section only (A/B/C). Generator auto-splits each section into G1/G2/G3, rotates subject mapping across bundles for fairness, and applies day-spread rules from the LAB threshold setting below.</div>
-                    <div class="counter" id="assignments-count"></div>
-                    <div class="counter" id="sections-count"></div>
-                    <div class="counter" id="teachers-count"></div>
-                    <div class="counter" id="lecture-sum"></div>
-                    <div class="field-hint" id="copy-sample-feedback">Use Sample Rows to quickly test manual assignment mode.</div>
                 </div>
 
                 <div class="col-lg-4">
@@ -180,11 +151,10 @@
                         class="form-control"
                         id="section_classrooms"
                         name="section_classrooms"
-                        rows="7"
-                        placeholder="Class,Standard,Section,HomeRoom"
+                        rows="10"
+                        placeholder="Standard,Class,Section,HomeRoom"
                     >{{ form_values.section_classrooms }}</textarea>
-                    <div class="field-hint">Theory classes stay in home room; LAB rows can override with allowed lab rooms.</div>
-                    <div class="csv-example">Example: Class-01,Year-1,A,CR-101</div>
+                    <div class="csv-example">Example: Year-1,Class-01,A,CR-101</div>
                     <div class="counter" id="home-rooms-count"></div>
                 </div>
 
@@ -198,23 +168,8 @@
                         placeholder="Faculty Name,MaxPeriodsPerDay"
                     >{{ form_values.faculty_daily_limits }}</textarea>
                     <div class="field-hint">Use only for exceptions to the default faculty daily max.</div>
-                    <div class="csv-example">Example: Faculty-01,6</div>
+                    <div class="csv-example">Example: Faculty-01,3</div>
                     <div class="counter" id="faculty-limits-count"></div>
-                </div>
-
-                <!-- Faculty Daily Free Period Policy -->
-                <div class="col-lg-6">
-                    <div class="form-check mt-3">
-                        <input class="form-check-input" type="checkbox" id="faculty_daily_free_period" 
-                               name="faculty_daily_free_period" value="1"
-                               {% if form_values.get('faculty_daily_free_period') == '1' %}checked{% endif %}>
-                        <label class="form-check-label" for="faculty_daily_free_period">
-                            <strong>Enforce daily free period for theory faculty</strong>
-                            <div class="small text-muted mt-1">
-                                Faculty with theory load will have at least 1 free teaching period per day for admin tasks, meetings, and rest. Recommended for realistic schedules.
-                            </div>
-                        </label>
-                    </div>
                 </div>
 
                 <!-- Scenario Comparison Runs -->
@@ -232,30 +187,9 @@
                     </div>
                 </div>
 
-                <div class="col-lg-6">
-                    <label for="lab_same_day_subject_threshold" class="form-label form-label-strong mt-3">LAB Same-Day Threshold</label>
-                    <div class="input-group">
-                        <input
-                            type="number"
-                            class="form-control"
-                            id="lab_same_day_subject_threshold"
-                            name="lab_same_day_subject_threshold"
-                            value="{{ form_values.get('lab_same_day_subject_threshold', '3') }}"
-                            min="1"
-                            max="20"
-                            required
-                        >
-                        <span class="input-group-text">subjects</span>
-                    </div>
-                    <div class="small text-muted mt-2">
-                        If LAB subjects in a section are greater than this value, LAB bundles can repeat on the same day (with alternating group-subject rotation). If not, LAB bundles are spread across different days whenever possible.
-                    </div>
-                </div>
-
+                
                 <div class="col-12 d-flex flex-wrap gap-3 align-items-center mt-4">
                     <button type="submit" class="btn btn-generate">Generate Timetables</button>
-                    <button type="button" class="btn btn-outline-primary" id="load-feasible-sample">Load Starter Dataset</button>
-                    <button type="button" class="btn btn-outline-dark" id="load-large-demo-sample">Load Feasible Benchmark Dataset</button>
                 </div>
             </form>
         </section>

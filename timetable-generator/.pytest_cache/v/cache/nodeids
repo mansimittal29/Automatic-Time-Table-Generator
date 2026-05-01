@@ -1,0 +1,6 @@
+[
+  "tests/test_auth_security.py::test_cross_origin_post_is_blocked",
+  "tests/test_auth_security.py::test_dashboard_redirects_when_not_authenticated",
+  "tests/test_auth_security.py::test_login_page_loads",
+  "tests/test_auth_security.py::test_login_rate_limit_blocks_after_repeated_failures"
+]

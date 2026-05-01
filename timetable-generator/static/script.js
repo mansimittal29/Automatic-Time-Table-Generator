@@ -375,12 +375,14 @@ function parseAssignmentLines(rawValue) {
                     sessionCount: 0,
                     teachers: new Set(),
                     rooms: new Set(),
+                    subjects: new Set(),
                 };
             }
 
             var sectionStats = labStatsBySection[sectionStatsKey];
             sectionStats.sessionCount += lectures / 2;
             sectionStats.teachers.add(teacher);
+            sectionStats.subjects.add(subject);
             allowedRooms.forEach(function (roomName) {
                 sectionStats.rooms.add(roomName);
             });
@@ -406,33 +408,28 @@ function parseAssignmentLines(rawValue) {
 
     Object.keys(labStatsBySection).forEach(function (sectionStatsKey) {
         var sectionStats = labStatsBySection[sectionStatsKey];
-        if (sectionStats.sessionCount % 3 !== 0) {
-            errors.push(
-                "LAB rows for "
-                + sectionStats.label
-                + " create "
-                + sectionStats.sessionCount
-                + " lab sessions (lectures/2). Use multiples of 3 so G1/G2/G3 can run in the same slot."
-            );
-        }
-
-        if (sectionStats.teachers.size < 3) {
+        var requiredDistinctCount = Math.max(1, Math.min(3, sectionStats.subjects.size));
+        if (sectionStats.teachers.size < requiredDistinctCount) {
             errors.push(
                 "LAB rows for "
                 + sectionStats.label
                 + " have only "
                 + sectionStats.teachers.size
-                + " distinct faculty. Provide at least 3 distinct faculty for synchronized G1/G2/G3 labs."
+                + " distinct faculty. Provide at least "
+                + requiredDistinctCount
+                + " distinct faculty for synchronized labs."
             );
         }
 
-        if (sectionStats.rooms.size < 3) {
+        if (sectionStats.rooms.size < requiredDistinctCount) {
             errors.push(
                 "LAB rows for "
                 + sectionStats.label
                 + " have only "
                 + sectionStats.rooms.size
-                + " distinct allowed rooms. Provide at least 3 rooms for distinct G1/G2/G3 allocation."
+                + " distinct allowed rooms. Provide at least "
+                + requiredDistinctCount
+                + " rooms for distinct synchronized lab allocation."
             );
         }
     });
@@ -732,107 +729,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     if (!feasibleSampleDefaults.lab_same_day_subject_threshold) {
         feasibleSampleDefaults.lab_same_day_subject_threshold = "3";
-    }
-
-    function applyFeasibleSample(sampleValues, feedbackMessage) {
-        sampleFieldIds.forEach(function (id) {
-            var field = document.getElementById(id);
-            if (field) {
-                field.value = sampleValues[id] || "";
-            }
-        });
-
-        var workingDaysField = document.getElementById("working_days");
-        var periodsField = document.getElementById("periods_per_day");
-        var lunchField = document.getElementById("lunch_break_periods");
-        var facultyMaxField = document.getElementById("faculty_daily_max_periods");
-        var labThresholdField = document.getElementById("lab_same_day_subject_threshold");
-
-        if (workingDaysField) {
-            workingDaysField.value = sampleValues.working_days || "5";
-        }
-        if (periodsField) {
-            periodsField.value = sampleValues.periods_per_day || "8";
-        }
-        if (lunchField) {
-            lunchField.value = sampleValues.lunch_break_periods || "5";
-        }
-        if (facultyMaxField) {
-            facultyMaxField.value = sampleValues.faculty_daily_max_periods || "6";
-        }
-        if (labThresholdField) {
-            labThresholdField.value = sampleValues.lab_same_day_subject_threshold || "3";
-        }
-
-        var manualSourceOption = document.getElementById("assignment_source_manual");
-        if (manualSourceOption) {
-            manualSourceOption.checked = true;
-        }
-
-        toggleAssignmentSourceUI();
-        updateAll();
-        setCopyFeedback(feedbackMessage || "Starter dataset loaded.", false);
-    }
-
-    var loadSampleButton = document.getElementById("load-feasible-sample");
-    if (loadSampleButton) {
-        loadSampleButton.addEventListener("click", function () {
-            if (!window.fetch) {
-                applyFeasibleSample(feasibleSampleDefaults);
-                return;
-            }
-
-            loadSampleButton.disabled = true;
-
-            fetch("/api/form/feasible-sample", { credentials: "same-origin" })
-                .then(function (response) {
-                    if (!response.ok) {
-                        throw new Error("Failed to load feasible sample");
-                    }
-                    return response.json();
-                })
-                .then(function (payload) {
-                    var sampleValues = payload && payload.form_values ? payload.form_values : feasibleSampleDefaults;
-                    applyFeasibleSample(sampleValues, "Starter dataset loaded.");
-                })
-                .catch(function () {
-                    applyFeasibleSample(feasibleSampleDefaults, "Loaded fallback starter values.");
-                })
-                .finally(function () {
-                    loadSampleButton.disabled = false;
-                });
-        });
-    }
-
-    var loadLargeDemoButton = document.getElementById("load-large-demo-sample");
-    if (loadLargeDemoButton) {
-        loadLargeDemoButton.addEventListener("click", function () {
-            if (!window.fetch) {
-                applyFeasibleSample(feasibleSampleDefaults, "Loaded current starter values.");
-                return;
-            }
-
-            loadLargeDemoButton.disabled = true;
-
-            fetch("/api/form/large-demo-sample", { credentials: "same-origin" })
-                .then(function (response) {
-                    if (!response.ok) {
-                        throw new Error("Failed to load large demo sample");
-                    }
-                    return response.json();
-                })
-                .then(function (payload) {
-                    var sampleValues = payload && payload.form_values ? payload.form_values : feasibleSampleDefaults;
-                    applyFeasibleSample(sampleValues, "Feasible benchmark dataset loaded.");
-                })
-                .catch(function () {
-                    applyFeasibleSample(feasibleSampleDefaults, "Loaded current starter values.");
-                    setCopyFeedback("Could not load feasible benchmark dataset. Loaded current starter values.", true);
-                })
-                .finally(function () {
-                    loadLargeDemoButton.disabled = false;
-                });
-        });
     }
 
     toggleAssignmentSourceUI();

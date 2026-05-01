@@ -110,10 +110,6 @@ Loaded dataset shape:
 - LAB rows are auto-split into G1/G2/G3 groups and scheduled in the same slot with distinct lab rooms
 - Faculty rest rule is active: no back-to-back periods for the same teacher (except the two periods of one LAB block)
 
-Programmatic endpoint for the same payload:
-
-- /api/form/large-demo-sample
-
 ## Project Structure
 
 ```text
@@ -260,8 +256,6 @@ Notes:
 
 ## API Endpoints
 
-- /api/form/feasible-sample
-- /api/form/large-demo-sample
 - /api/timetable/latest
 - /api/timetable/class/latest
 - /api/timetable/room/latest

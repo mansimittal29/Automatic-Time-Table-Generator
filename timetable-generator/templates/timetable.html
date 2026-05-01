@@ -1,4 +1,4 @@
-<!doctype html>
+ <!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -44,10 +44,13 @@
                 <span class="status-pill status-{{ latest_version.status }}">{{ latest_version.status | capitalize }}</span>
 
                 {% if latest_version.status == 'draft' and role_code in ['ADMIN', 'HOD'] %}
-                <form method="POST" action="{{ url_for('approve_timetable_version', version_id=latest_version.id) }}" style="margin: 0;">
-                    <button type="submit" class="btn btn-sm btn-status-approve">
-                        Approve
-                    </button>
+                <form method="POST" action="{{ url_for('approve_timetable_version', version_id=latest_version.id) }}" style="margin: 0; display:inline-block;" class="version-action-form" data-action="approve">
+                    <input type="hidden" name="approval_comment" class="action-comment-input" value="">
+                    <button type="submit" class="btn btn-sm btn-status-approve">Approve</button>
+                </form>
+                <form method="POST" action="{{ url_for('reject_timetable_version', version_id=latest_version.id) }}" style="margin: 0; display:inline-block; margin-left:8px;" class="version-action-form" data-action="reject">
+                    <input type="hidden" name="rejection_comment" class="action-comment-input" value="">
+                    <button type="submit" class="btn btn-sm btn-status-reject">Reject</button>
                 </form>
                 {% endif %}
 
@@ -106,6 +109,13 @@
                     </select>
                 </div>
 
+                <div class="col-12" id="export-target-wrap">
+                    <label for="export-targets" class="form-label form-label-strong">Targets</label>
+                    <select class="form-control" id="export-targets" name="selected_target" multiple size="6"></select>
+                    <div class="helper-note mt-2" id="export-target-hint">
+                    </div>
+                </div>
+
                 <div class="col-md-3">
                     <label for="export-format" class="form-label form-label-strong">Format</label>
                     <select class="form-control" id="export-format" name="export_format">
@@ -118,13 +128,6 @@
                     <button type="submit" class="btn btn-generate w-100">Download</button>
                 </div>
 
-                <div class="col-12" id="export-target-wrap">
-                    <label for="export-targets" class="form-label form-label-strong">Targets</label>
-                    <select class="form-control" id="export-targets" name="selected_target" multiple size="6"></select>
-                    <div class="helper-note mt-2" id="export-target-hint">
-                        Choose category and mode to select specific timetable targets. In All mode, targets are ignored.
-                    </div>
-                </div>
             </form>
         </section>
 
@@ -149,10 +152,6 @@
             <article class="metric-card">
                 <div class="metric-label">Teaching Slots</div>
                 <div class="metric-value">{{ metrics_summary.total_slots }}</div>
-            </article>
-            <article class="metric-card">
-                <div class="metric-label">Scheduled</div>
-                <div class="metric-value">{{ metrics_summary.scheduled_slots }}</div>
             </article>
             <article class="metric-card">
                 <div class="metric-label">Utilization</div>
@@ -275,11 +274,6 @@
                 <h2 class="mini-title mb-0">Manual Timetable Edit</h2>
                 <span class="section-meta">Editing {{ latest_version.version_label }}</span>
             </div>
-            <p class="helper-note mb-3">
-                Click a slot for quick edits, or drag one scheduled slot and drop it onto a target slot to move it.
-                All class/faculty/room/section views are regenerated from the same updated snapshot.
-            </p>
-            <p class="helper-note mb-2">Live clash hints appear during drag, and final conflict validation runs before save.</p>
             <div class="manual-edit-selection-summary mb-3" id="manual-edit-selection-summary">No slot selected yet. Choose fields manually, or click a slot below.</div>
             <div class="manual-edit-live-warning d-none mb-3" id="manual-edit-live-warning" role="status" aria-live="polite"></div>
             <form id="manual-edit-form" method="POST" action="{{ url_for('manual_edit_timetable_version', version_id=latest_version.id) }}" class="row g-3">
@@ -407,9 +401,6 @@
                 <h2 class="mini-title mb-0">Class-Wise Timetables</h2>
                 <span class="section-meta">{{ summary.class_count }} classes</span>
             </div>
-            <p class="helper-note mb-0">
-                Review complete section groupings under each class for academic planning and department-level validation.
-            </p>
         </section>
 
         {% for class_table in class_tables %}
@@ -511,9 +502,6 @@
                 <h2 class="mini-title mb-0">Faculty-Wise Timetables</h2>
                 <span class="section-meta">{{ summary.faculty_count }} faculty timetables</span>
             </div>
-            <p class="helper-note mb-0">
-                Use this view for workload verification and faculty-facing schedule communication.
-            </p>
         </section>
 
         {% for table in faculty_tables %}
@@ -597,9 +585,6 @@
                 <h2 class="mini-title mb-0">Room-Wise Timetables</h2>
                 <span class="section-meta">{{ summary.room_count }} rooms</span>
             </div>
-            <p class="helper-note mb-0">
-                Track classroom and lab utilization to support infrastructure planning and conflict monitoring.
-            </p>
         </section>
 
         {% for table in room_tables %}
@@ -756,5 +741,31 @@
 
     <script id="export-options-json" type="application/json">{{ export_options | tojson }}</script>
     <script src="{{ url_for('static', filename='result.js') }}"></script>
+    <script>
+        (function () {
+            function promptForComment(action) {
+                var title = action === 'approve' ? 'Approval comment (optional)' : action === 'reject' ? 'Rejection comment (optional)' : 'Comment (optional)';
+                try {
+                    var comment = window.prompt(title + '\n\nYou may leave this blank.');
+                    return comment === null ? null : String(comment || '');
+                } catch (e) {
+                    return '';
+                }
+            }
+
+            document.querySelectorAll('.version-action-form').forEach(function (form) {
+                form.addEventListener('submit', function (ev) {
+                    var action = form.getAttribute('data-action') || '';
+                    var comment = promptForComment(action);
+                    if (comment === null) {
+                        ev.preventDefault();
+                        return;
+                    }
+                    var input = form.querySelector('.action-comment-input');
+                    if (input) input.value = comment;
+                });
+            });
+        })();
+    </script>
 </body>
 </html>
