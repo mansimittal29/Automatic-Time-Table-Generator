@@ -323,3 +323,4 @@ CI is included at `.github/workflows/ci.yml`.
 - SQLite database is auto-created at instance/timetable.db when app starts.
 - Use `python migrate_db.py` after pulling schema/model changes to upgrade an existing local DB safely.
 - Change default admin credentials with env vars: TIMETABLE_ADMIN_USERNAME, TIMETABLE_ADMIN_PASSWORD, TIMETABLE_ADMIN_NAME.
+
